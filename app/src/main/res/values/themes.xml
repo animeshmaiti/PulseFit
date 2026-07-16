@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.PulseFit" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.PulseFit.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/Theme.PulseFit</item>
+    </style>
 </resources>

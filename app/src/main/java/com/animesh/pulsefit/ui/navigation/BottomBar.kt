@@ -19,8 +19,7 @@ fun BottomBar(
     val items = listOf(
         Screen.Home,
         Screen.Exercise,
-        Screen.Progress,
-        Screen.Profile
+        Screen.Progress
     )
 
     NavigationBar {
@@ -37,7 +36,6 @@ fun BottomBar(
                 Screen.Home -> R.drawable.home_24px
                 Screen.Exercise -> R.drawable.exercise_24px
                 Screen.Progress -> R.drawable.monitoring_24px
-                Screen.Profile -> R.drawable.account_circle_24px
             }
 
             NavigationBarItem(

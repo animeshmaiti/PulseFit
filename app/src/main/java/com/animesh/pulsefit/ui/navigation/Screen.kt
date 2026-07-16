@@ -7,5 +7,4 @@ sealed class Screen(
     object Home : Screen("home", "Home")
     object Exercise : Screen("exercise", "Exercise")
     object Progress : Screen("progress", "Progress")
-    object Profile : Screen("profile", "Profile")
 }
