@@ -1,50 +1,75 @@
 package com.animesh.pulsefit.ui.components
 
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.navigation.Screen
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PulseFitTopBar(
     title: String,
-    onSearchClick: () -> Unit = {},
-    onProfileClick: () -> Unit = {},
-    onSettingsClick: () -> Unit = {}
+    navController: NavController,
+    onSearchClick: () -> Unit = {}
 ) {
-    CenterAlignedTopAppBar(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .statusBarsPadding()
+            .padding(horizontal = 20.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
-        title = {
-            Text(text = title)
-        },
+        Text(
+            text = title,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
 
-        actions = {
-
-            IconButton(onClick = onSearchClick) {
-                Icon(
-                    painter = painterResource(R.drawable.search_24px),
-                    contentDescription = "Search"
-                )
-            }
-
-            IconButton(onClick = onProfileClick) {
-                Icon(
-                    painter = painterResource(R.drawable.account_circle_24px),
-                    contentDescription = "Profile"
-                )
-            }
-
-            IconButton(onClick = onSettingsClick) {
-                Icon(
-                    painter = painterResource(R.drawable.settings_24px),
-                    contentDescription = "Settings"
-                )
-            }
+        IconButton(onClick = onSearchClick) {
+            Icon(
+                painter = painterResource(R.drawable.search_24px),
+                contentDescription = "Search"
+            )
         }
-    )
+
+        IconButton(
+            onClick = {
+                navController.navigate(Screen.Profile.route) {
+                    launchSingleTop = true
+                }
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.account_circle_24px),
+                contentDescription = "Profile"
+            )
+        }
+
+        IconButton(
+            onClick = {
+                navController.navigate(Screen.Settings.route) {
+                    launchSingleTop = true
+                }
+            }
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.settings_24px),
+                contentDescription = "Settings"
+            )
+        }
+    }
 }
