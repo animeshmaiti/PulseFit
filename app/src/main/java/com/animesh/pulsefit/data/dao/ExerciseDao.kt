@@ -1,4 +1,4 @@
-package com.animesh.pulsefit.data.database.dao
+package com.animesh.pulsefit.data.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
