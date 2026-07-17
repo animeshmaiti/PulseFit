@@ -15,7 +15,7 @@ object DatabaseProvider {
                 PulseFitDatabase::class.java,
                 "pulsefit_database"
             )
-                .fallbackToDestructiveMigration(false)
+                .fallbackToDestructiveMigration()
                 .build()
 
             INSTANCE = instance
