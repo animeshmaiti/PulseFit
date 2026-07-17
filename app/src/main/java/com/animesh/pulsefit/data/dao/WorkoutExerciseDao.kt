@@ -14,6 +14,16 @@ interface WorkoutExerciseDao {
     """)
     fun getExercisesForWorkout(workoutId: Long): Flow<List<WorkoutExercise>>
 
+    @Query("""
+    SELECT COALESCE(MAX(position), 0)
+    FROM workout_exercise
+    WHERE workoutId = :workoutId
+    """)
+    suspend fun getLastPosition(workoutId: Long): Int
+
+    @Query("SELECT * FROM workout_exercise WHERE id = :id")
+    suspend fun getWorkoutExerciseById(id: Long): WorkoutExercise?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWorkoutExercise(workoutExercise: WorkoutExercise): Long
 

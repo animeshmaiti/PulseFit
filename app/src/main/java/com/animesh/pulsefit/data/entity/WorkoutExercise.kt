@@ -24,7 +24,8 @@ import com.animesh.pulsefit.data.enums.BreakType
     ],
     indices = [
         Index("workoutId"),
-        Index("exerciseId")
+        Index("exerciseId"),
+        Index(value = ["workoutId", "position"], unique = true)
     ]
 )
 data class WorkoutExercise(
@@ -40,7 +41,7 @@ data class WorkoutExercise(
     val position: Int,
 
     // "NONE", "TIMER", "MANUAL"
-    val breakType: BreakType,
+    val breakType: BreakType = BreakType.NONE,
 
     // Seconds
     val breakDuration: Int = 0

@@ -7,10 +7,16 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.animesh.pulsefit.data.entity.Exercise
+import com.animesh.pulsefit.data.enums.ExerciseCategory
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseDao {
+
+    @Query("SELECT * FROM exercise WHERE category = :category ORDER BY name")
+    fun getExercisesByCategory(
+        category: ExerciseCategory
+    ): Flow<List<Exercise>>
 
     @Query("SELECT * FROM exercise ORDER BY name ASC")
     fun getAllExercises(): Flow<List<Exercise>>

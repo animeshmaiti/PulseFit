@@ -2,24 +2,33 @@ package com.animesh.pulsefit.data.repository
 
 import com.animesh.pulsefit.data.dao.WorkoutDao
 import com.animesh.pulsefit.data.entity.Workout
+import kotlinx.coroutines.flow.Flow
 
 class WorkoutRepository(
     private val workoutDao: WorkoutDao
 ) {
 
-    val workouts = workoutDao.getAllWorkouts()
+    fun getAllWorkouts(): Flow<List<Workout>> =
+        workoutDao.getAllWorkouts()
 
-    val favorites = workoutDao.getFavoriteWorkouts()
+    fun getFavoriteWorkouts(): Flow<List<Workout>> =
+        workoutDao.getFavoriteWorkouts()
 
-    suspend fun insert(workout: Workout) =
+    suspend fun getWorkoutById(id: Long): Workout? =
+        workoutDao.getWorkoutById(id)
+
+    suspend fun createWorkout(workout: Workout): Long =
         workoutDao.insertWorkout(workout)
 
-    suspend fun update(workout: Workout) =
+    suspend fun updateWorkout(workout: Workout) =
         workoutDao.updateWorkout(workout)
 
-    suspend fun delete(workout: Workout) =
+    suspend fun deleteWorkout(workout: Workout) =
         workoutDao.deleteWorkout(workout)
 
-    suspend fun getById(id: Long) =
-        workoutDao.getWorkoutById(id)
+    suspend fun toggleFavorite(workout: Workout) {
+        workoutDao.updateWorkout(
+            workout.copy(isFavorite = !workout.isFavorite)
+        )
+    }
 }
