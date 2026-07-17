@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.animesh.pulsefit.data.enums.BreakType
 
 @Entity(
     tableName = "workout_exercise",
@@ -39,7 +40,7 @@ data class WorkoutExercise(
     val position: Int,
 
     // "NONE", "TIMER", "MANUAL"
-    val breakType: String = "NONE",
+    val breakType: BreakType,
 
     // Seconds
     val breakDuration: Int = 0

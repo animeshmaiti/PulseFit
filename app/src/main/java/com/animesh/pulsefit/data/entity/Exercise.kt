@@ -2,6 +2,7 @@ package com.animesh.pulsefit.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.animesh.pulsefit.data.enums.ExerciseCategory
 
 @Entity(tableName = "exercise")
 data class Exercise(
@@ -11,7 +12,7 @@ data class Exercise(
 
     val name: String,
 
-    val category: String,
+    val category: ExerciseCategory,
 
     val description: String = "",
 
