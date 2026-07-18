@@ -12,9 +12,18 @@ import androidx.compose.ui.res.painterResource
 import com.animesh.pulsefit.R
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
+import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.ui.unit.dp
 
 @Composable
-fun ExerciseScreen() {
+fun ExerciseScreen(
+    viewModel: ExerciseViewModel
+) {
+    val exercises by viewModel.exercises.collectAsStateWithLifecycle()
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -43,7 +52,16 @@ fun ExerciseScreen() {
 
             item {
                 SectionTitle("Exercises")
-                EmptySection("No exercises")
+            }
+
+            items(exercises) { exercise ->
+                Text(
+                    text = exercise.name,
+                    modifier = Modifier.padding(
+                        horizontal = 16.dp,
+                        vertical = 8.dp
+                    )
+                )
             }
 
             item {

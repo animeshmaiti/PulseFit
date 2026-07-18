@@ -16,7 +16,8 @@ data class Exercise(
 
     val description: String = "",
 
-    // Metabolic Equivalent of Task (used for calorie estimation)
+    // Metabolic Equivalent of Task (used for cal
+    // orie estimation)
     val met: Float = 0f,
 
     val isFavorite: Boolean = false,

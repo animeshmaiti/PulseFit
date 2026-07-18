@@ -12,6 +12,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ExerciseDao {
+    @Query("SELECT COUNT(*) FROM exercise")
+    suspend fun getExerciseCount(): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertExercises(exercises: List<Exercise>)
 
     @Query("SELECT * FROM exercise WHERE category = :category ORDER BY name")
     fun getExercisesByCategory(
