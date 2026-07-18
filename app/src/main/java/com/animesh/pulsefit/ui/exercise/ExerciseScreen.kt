@@ -16,8 +16,7 @@ import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
-import androidx.compose.ui.unit.dp
+import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 
 @Composable
 fun ExerciseScreen(
@@ -55,12 +54,12 @@ fun ExerciseScreen(
             }
 
             items(exercises) { exercise ->
-                Text(
-                    text = exercise.name,
-                    modifier = Modifier.padding(
-                        horizontal = 16.dp,
-                        vertical = 8.dp
-                    )
+
+                ExerciseCard(
+                    exercise = exercise,
+                    onFavoriteClick = {
+                        viewModel.toggleFavorite(exercise)
+                    }
                 )
             }
 
