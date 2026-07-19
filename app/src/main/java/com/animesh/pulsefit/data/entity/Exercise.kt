@@ -16,6 +16,9 @@ data class Exercise(
 
     val description: String = "",
 
+    // Default duration in seconds
+    val defaultDuration: Int = 30,
+
     // Metabolic Equivalent of Task (used for cal
     // orie estimation)
     val met: Float = 0f,

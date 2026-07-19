@@ -4,12 +4,10 @@ enum class ExerciseCategory {
     CHEST,
     BACK,
     SHOULDERS,
-    BICEPS,
-    TRICEPS,
     LEGS,
+    ARMS,
     CORE,
     CARDIO,
     FULL_BODY,
-    STRETCHING,
     OTHER
 }

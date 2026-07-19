@@ -37,8 +37,11 @@ data class WorkoutExercise(
 
     val exerciseId: Long,
 
+    // Exercise timer (seconds)
+    val duration: Int,
+
     // Order in workout
-    val position: Int,
+    val order: Int,
 
     // "NONE", "TIMER", "MANUAL"
     val breakType: BreakType = BreakType.NONE,
