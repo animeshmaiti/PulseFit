@@ -1,32 +1,57 @@
 package com.animesh.pulsefit.ui.exercise
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.animesh.pulsefit.R
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
+import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.compose.foundation.lazy.items
-import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 
 @Composable
 fun ExerciseScreen(
     viewModel: ExerciseViewModel
 ) {
+
+    var showSearch by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+
     val exercises by viewModel.exercises.collectAsStateWithLifecycle()
+
+    val filteredExercises = remember(exercises, searchQuery) {
+        if (searchQuery.isBlank()) {
+            exercises
+        } else {
+            exercises.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    // TODO
                 }
             ) {
                 Icon(
@@ -35,7 +60,6 @@ fun ExerciseScreen(
                 )
             }
         }
-
     ) { padding ->
 
         LazyColumn(
@@ -50,10 +74,38 @@ fun ExerciseScreen(
             }
 
             item {
-                SectionTitle("Exercises")
+
+                SectionTitle(
+                    title = "Exercises",
+                    showSearch = true,
+                    onSearchClick = {
+                        showSearch = !showSearch
+
+                        if (!showSearch) {
+                            searchQuery = ""
+                        }
+                    }
+                )
+
+                if (showSearch) {
+                    OutlinedTextField(
+                        value = searchQuery,
+                        onValueChange = {
+                            searchQuery = it
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp,vertical = 8.dp),
+                        singleLine = true,
+                        placeholder = {
+                            Text("Search exercises...")
+                        },
+                        shape = RoundedCornerShape(50.dp)
+                    )
+                }
             }
 
-            items(exercises) { exercise ->
+            items(filteredExercises) { exercise ->
 
                 ExerciseCard(
                     exercise = exercise,
@@ -64,12 +116,16 @@ fun ExerciseScreen(
             }
 
             item {
-                SectionTitle("Workouts")
+                SectionTitle(
+                    title = "Workouts",
+                    showSearch = true,
+                    onSearchClick = {
+                        // TODO: Workout search later
+                    }
+                )
+
                 EmptySection("No workouts")
             }
-
         }
-
     }
-
 }

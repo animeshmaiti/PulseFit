@@ -41,7 +41,7 @@ data class WorkoutExercise(
     val duration: Int,
 
     // Order in workout
-    val order: Int,
+    val position: Int,
 
     // "NONE", "TIMER", "MANUAL"
     val breakType: BreakType = BreakType.NONE,

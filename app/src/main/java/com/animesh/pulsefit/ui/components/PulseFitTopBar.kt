@@ -21,8 +21,7 @@ import com.animesh.pulsefit.ui.navigation.Screen
 @Composable
 fun PulseFitTopBar(
     title: String,
-    navController: NavController,
-    onSearchClick: () -> Unit = {}
+    navController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -38,13 +37,6 @@ fun PulseFitTopBar(
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
-
-        IconButton(onClick = onSearchClick) {
-            Icon(
-                painter = painterResource(R.drawable.search_24px),
-                contentDescription = "Search"
-            )
-        }
 
         IconButton(
             onClick = {
