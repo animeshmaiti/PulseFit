@@ -8,17 +8,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
 
 @Composable
 fun AddExerciseScreen(
-    onBack: () -> Unit
+    rootNavController: NavHostController
 ) {
     Scaffold(
         topBar = {
             PulseFitBackTopBar(
                 title = "Add Exercise",
-                onBack = onBack
+                onBack = {
+                    rootNavController.popBackStack()
+                }
             )
         }
     ) { padding ->
@@ -29,9 +32,11 @@ fun AddExerciseScreen(
                 .padding(padding)
                 .padding(16.dp)
         ) {
+
             Text(
-                text="add exercise screen"
+                text = "Add Exercise Screen"
             )
+
         }
     }
 }

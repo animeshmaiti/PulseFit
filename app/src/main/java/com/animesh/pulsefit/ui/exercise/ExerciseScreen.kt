@@ -11,26 +11,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.components.CreateBottomSheet
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
+import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
-import com.animesh.pulsefit.ui.components.CreateBottomSheet
 
 @Composable
 fun ExerciseScreen(
-    viewModel: ExerciseViewModel
+    viewModel: ExerciseViewModel,
+    rootNavController: NavHostController
 ) {
 
     var showSearch by rememberSaveable { mutableStateOf(false) }
@@ -65,9 +64,9 @@ fun ExerciseScreen(
     ) { _ ->
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
+
             item {
                 SectionTitle("Favorites")
                 EmptySection("No favorite exercises")
@@ -88,6 +87,7 @@ fun ExerciseScreen(
                 )
 
                 if (showSearch) {
+
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = {
@@ -95,7 +95,7 @@ fun ExerciseScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 8.dp,vertical = 8.dp),
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
                         singleLine = true,
                         placeholder = {
                             Text("Search exercises...")
@@ -116,27 +116,43 @@ fun ExerciseScreen(
             }
 
             item {
+
                 SectionTitle(
                     title = "Workouts",
                     showSearch = true,
                     onSearchClick = {
-                        // TODO: Workout search later
+                        // TODO
                     }
                 )
 
                 EmptySection("No workouts")
             }
         }
+
         if (showCreateSheet) {
+
             CreateBottomSheet(
+
                 onDismiss = {
                     showCreateSheet = false
                 },
+
                 onCreateExercise = {
-                    // TODO: Navigate to AddExerciseScreen
+
+                    showCreateSheet = false
+
+                    rootNavController.navigate(
+                        RootScreen.AddExercise.route
+                    )
                 },
+
                 onCreateWorkout = {
-                    // TODO: Navigate to AddWorkoutScreen
+
+                    showCreateSheet = false
+
+                    rootNavController.navigate(
+                        RootScreen.AddWorkout.route
+                    )
                 }
             )
         }

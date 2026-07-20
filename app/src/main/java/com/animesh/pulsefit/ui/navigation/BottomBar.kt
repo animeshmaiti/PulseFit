@@ -15,9 +15,9 @@ fun BottomBar(
 ) {
 
     val items = listOf(
-        Screen.Home,
-        Screen.Exercise,
-        Screen.Progress
+        MainScreen.Home,
+        MainScreen.Exercise,
+        MainScreen.Progress
     )
 
     NavigationBar {

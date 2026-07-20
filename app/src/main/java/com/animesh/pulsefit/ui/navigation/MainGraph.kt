@@ -1,10 +1,12 @@
 package com.animesh.pulsefit.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,33 +20,39 @@ import com.animesh.pulsefit.ui.settings.SettingsScreen
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 
 @Composable
-fun PulseFitApp() {
+fun MainGraph(
+    rootNavController: NavHostController
+) {
 
-    val navController = rememberNavController()
+    val mainNavController = rememberNavController()
 
-    androidx.compose.material3.Scaffold(
+    Scaffold(
+
         topBar = {
             PulseFitTopBar(
                 title = "PulseFit",
-                navController = navController
+                navController = mainNavController
             )
         },
+
         bottomBar = {
-            BottomBar(navController)
+            BottomBar(mainNavController)
         }
 
     ) { padding ->
 
         NavHost(
-            navController = navController,
-            startDestination = Screen.Exercise.route,
+            navController = mainNavController,
+            startDestination = MainScreen.Exercise.route,
             modifier = Modifier.padding(padding)
         ) {
-            composable(Screen.Home.route) {
+
+            composable(MainScreen.Home.route) {
                 HomeScreen()
             }
 
-            composable(Screen.Exercise.route) {
+            composable(MainScreen.Exercise.route) {
+
                 val app =
                     LocalContext.current.applicationContext as PulseFitApplication
 
@@ -55,19 +63,20 @@ fun PulseFitApp() {
                 )
 
                 ExerciseScreen(
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    rootNavController = rootNavController
                 )
             }
 
-            composable(Screen.Progress.route) {
+            composable(MainScreen.Progress.route) {
                 ProgressScreen()
             }
 
-            composable(Screen.Profile.route) {
+            composable(MainScreen.Profile.route) {
                 ProfileScreen()
             }
 
-            composable(Screen.Settings.route) {
+            composable(MainScreen.Settings.route) {
                 SettingsScreen()
             }
 

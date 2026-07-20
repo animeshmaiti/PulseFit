@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.animesh.pulsefit.R
-import com.animesh.pulsefit.ui.navigation.Screen
+import com.animesh.pulsefit.ui.navigation.MainScreen
 
 @Composable
 fun PulseFitTopBar(
@@ -40,7 +40,7 @@ fun PulseFitTopBar(
 
         IconButton(
             onClick = {
-                navController.navigate(Screen.Profile.route) {
+                navController.navigate(MainScreen.Profile.route) {
                     launchSingleTop = true
                 }
             }
@@ -53,7 +53,7 @@ fun PulseFitTopBar(
 
         IconButton(
             onClick = {
-                navController.navigate(Screen.Settings.route) {
+                navController.navigate(MainScreen.Settings.route) {
                     launchSingleTop = true
                 }
             }
