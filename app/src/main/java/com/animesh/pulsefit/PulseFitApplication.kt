@@ -9,7 +9,6 @@ import com.animesh.pulsefit.data.repository.WorkoutRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.util.Log
 
 class PulseFitApplication : Application() {
 
@@ -36,14 +35,9 @@ class PulseFitApplication : Application() {
 
             val dao = database.exerciseDao()
 
-            Log.d("PulseFit", "Count before = ${dao.getExerciseCount()}")
-
             if (dao.getExerciseCount() == 0) {
                 dao.insertExercises(DatabaseSeeder.exercises)
-                Log.d("PulseFit", "Database seeded")
             }
-
-            Log.d("PulseFit", "Count after = ${dao.getExerciseCount()}")
         }
     }
 }

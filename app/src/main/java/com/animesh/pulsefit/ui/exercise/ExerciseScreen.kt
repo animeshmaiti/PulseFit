@@ -26,6 +26,7 @@ import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.ui.components.CreateBottomSheet
 
 @Composable
 fun ExerciseScreen(
@@ -34,6 +35,7 @@ fun ExerciseScreen(
 
     var showSearch by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
+    var showCreateSheet by rememberSaveable { mutableStateOf(false) }
 
     val exercises by viewModel.exercises.collectAsStateWithLifecycle()
 
@@ -48,10 +50,11 @@ fun ExerciseScreen(
     }
 
     Scaffold(
+
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    // TODO
+                    showCreateSheet = true
                 }
             ) {
                 Icon(
@@ -67,7 +70,6 @@ fun ExerciseScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-
             item {
                 SectionTitle("Favorites")
                 EmptySection("No favorite exercises")
@@ -126,6 +128,19 @@ fun ExerciseScreen(
 
                 EmptySection("No workouts")
             }
+        }
+        if (showCreateSheet) {
+            CreateBottomSheet(
+                onDismiss = {
+                    showCreateSheet = false
+                },
+                onCreateExercise = {
+                    // TODO: Navigate to AddExerciseScreen
+                },
+                onCreateWorkout = {
+                    // TODO: Navigate to AddWorkoutScreen
+                }
+            )
         }
     }
 }
