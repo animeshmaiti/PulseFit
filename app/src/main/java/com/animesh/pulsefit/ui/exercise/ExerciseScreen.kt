@@ -1,6 +1,5 @@
 package com.animesh.pulsefit.ui.exercise
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import com.animesh.pulsefit.R
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
@@ -32,9 +30,7 @@ import com.animesh.pulsefit.ui.components.CreateBottomSheet
 
 @Composable
 fun ExerciseScreen(
-    viewModel: ExerciseViewModel,
-    onNavigateToAddExercise: () -> Unit,
-    onNavigateToAddWorkout: () -> Unit
+    viewModel: ExerciseViewModel
 ) {
 
     var showSearch by rememberSaveable { mutableStateOf(false) }
@@ -67,11 +63,12 @@ fun ExerciseScreen(
                 )
             }
         }
-    ) {_ ->
+    ) { padding ->
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-
+                .padding(padding)
         ) {
             item {
                 SectionTitle("Favorites")
@@ -138,12 +135,10 @@ fun ExerciseScreen(
                     showCreateSheet = false
                 },
                 onCreateExercise = {
-                    showCreateSheet = false
-                    onNavigateToAddExercise()
+                    // TODO: Navigate to AddExerciseScreen
                 },
                 onCreateWorkout = {
-                    showCreateSheet = false
-                    onNavigateToAddWorkout()
+                    // TODO: Navigate to AddWorkoutScreen
                 }
             )
         }
