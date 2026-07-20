@@ -50,7 +50,6 @@ fun ExerciseScreen(
     }
 
     Scaffold(
-
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
@@ -63,12 +62,11 @@ fun ExerciseScreen(
                 )
             }
         }
-    ) { padding ->
+    ) { _ ->
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
         ) {
             item {
                 SectionTitle("Favorites")
