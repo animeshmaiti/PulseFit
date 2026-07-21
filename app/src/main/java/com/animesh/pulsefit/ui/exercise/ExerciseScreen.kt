@@ -10,6 +10,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,7 +33,7 @@ fun ExerciseScreen(
     viewModel: ExerciseViewModel,
     rootNavController: NavHostController
 ) {
-
+    val snackbarHostState = remember { SnackbarHostState() }
     var showSearch by rememberSaveable { mutableStateOf(false) }
     var searchQuery by rememberSaveable { mutableStateOf("") }
     var showCreateSheet by rememberSaveable { mutableStateOf(false) }
@@ -60,9 +62,16 @@ fun ExerciseScreen(
                     contentDescription = "Add"
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) { _ ->
-
+        LaunchedEffect(Unit) {
+            viewModel.message.collect { message ->
+                snackbarHostState.showSnackbar(message)
+            }
+        }
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {

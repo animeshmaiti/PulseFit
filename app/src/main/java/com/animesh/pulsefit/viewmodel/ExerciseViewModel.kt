@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -22,10 +24,13 @@ class ExerciseViewModel(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = emptyList()
             )
+    private val _message = MutableSharedFlow<String>()
+    val message = _message.asSharedFlow()
 
-    fun addExercise(exercise: Exercise) {
+    fun createExercise(exercise: Exercise) {
         viewModelScope.launch {
             repository.createExercise(exercise)
+            _message.emit("Exercise saved successfully.")
         }
     }
 

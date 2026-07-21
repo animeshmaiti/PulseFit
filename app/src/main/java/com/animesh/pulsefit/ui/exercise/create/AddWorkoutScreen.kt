@@ -1,4 +1,4 @@
-package com.animesh.pulsefit.ui.exercise
+package com.animesh.pulsefit.ui.exercise.create
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
