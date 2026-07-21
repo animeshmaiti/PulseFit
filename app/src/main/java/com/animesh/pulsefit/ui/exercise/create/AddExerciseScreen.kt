@@ -17,6 +17,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,6 +33,7 @@ import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.enums.ExerciseCategory
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.ui.extensions.displayName
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,42 +94,38 @@ fun AddExerciseScreen(
 
             ExposedDropdownMenuBox(
                 expanded = expanded,
-                onExpandedChange = {
-                    expanded = !expanded
-                }
+                onExpandedChange = { expanded = it }
             ) {
-
                 OutlinedTextField(
                     modifier = Modifier
-                        .menuAnchor()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth(),
-                    value = category.name,
+                    value = category.displayName(),
                     onValueChange = {},
                     readOnly = true,
                     label = {
                         Text("Category")
                     },
                     trailingIcon = {
-                        ExposedDropdownMenuDefaults.TrailingIcon(expanded)
-                    }
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
                 )
 
                 ExposedDropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = {
-                        expanded = false
-                    }
+                    onDismissRequest = { expanded = false }
                 ) {
-                    ExerciseCategory.entries.forEach {
-
+                    ExerciseCategory.entries.forEach { selection ->
                         DropdownMenuItem(
                             text = {
-                                Text(it.name)
+                                Text(selection.displayName())
                             },
                             onClick = {
-                                category = it
+                                category = selection
                                 expanded = false
-                            }
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
                         )
                     }
                 }

@@ -2,7 +2,11 @@ package com.animesh.pulsefit.ui.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,6 +27,7 @@ fun MainGraph(
 ) {
 
     val mainNavController = rememberNavController()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
 
@@ -35,6 +40,9 @@ fun MainGraph(
 
         bottomBar = {
             BottomBar(mainNavController)
+        } ,
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
 
     ) { padding ->
@@ -50,6 +58,12 @@ fun MainGraph(
             }
 
             composable(MainScreen.Exercise.route) {
+                LaunchedEffect(Unit) {
+                    exerciseViewModel.message.collect { message ->
+                        snackbarHostState.showSnackbar(message)
+                        exerciseViewModel.clearMessage()
+                    }
+                }
 
                 ExerciseScreen(
                     viewModel = exerciseViewModel,
