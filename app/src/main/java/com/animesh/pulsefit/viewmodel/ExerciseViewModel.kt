@@ -35,11 +35,14 @@ class ExerciseViewModel(
         _message.resetReplayCache()
     }
 
-    fun createExercise(exercise: Exercise) {
-        viewModelScope.launch {
-            repository.createExercise(exercise)
-            _message.emit("Exercise saved successfully.")
+    suspend fun createExercise(exercise: Exercise): Boolean {
+        if (repository.exerciseExists(exercise.name)) {
+            return false
         }
+
+        repository.createExercise(exercise)
+        _message.emit("Exercise saved successfully.")
+        return true
     }
 
     fun deleteExercise(exercise: Exercise) {

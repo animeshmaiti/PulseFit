@@ -21,6 +21,10 @@ class ExerciseRepository(
     suspend fun createExercise(exercise: Exercise): Long =
         exerciseDao.insertExercise(exercise)
 
+    suspend fun exerciseExists(name: String): Boolean {
+        return exerciseDao.exerciseExists(name)
+    }
+
     suspend fun updateExercise(exercise: Exercise) =
         exerciseDao.updateExercise(exercise)
 

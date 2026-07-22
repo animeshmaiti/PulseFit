@@ -20,6 +20,8 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -34,6 +36,7 @@ import com.animesh.pulsefit.data.enums.ExerciseCategory
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 import com.animesh.pulsefit.ui.extensions.displayName
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +44,8 @@ fun AddExerciseScreen(
     rootNavController: NavHostController,
     viewModel: ExerciseViewModel
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
     var name by rememberSaveable { mutableStateOf("") }
 
     var description by rememberSaveable { mutableStateOf("") }
@@ -63,6 +68,9 @@ fun AddExerciseScreen(
                     rootNavController.popBackStack()
                 }
             )
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
         }
     ) { padding ->
         Column(
@@ -197,8 +205,14 @@ fun AddExerciseScreen(
                         isBuiltIn = false
                     )
 
-                    viewModel.createExercise(exercise)
-                    rootNavController.popBackStack()
+                    scope.launch {
+                        val success = viewModel.createExercise(exercise)
+                        if (success) {
+                            rootNavController.popBackStack()
+                        } else {
+                            snackbarHostState.showSnackbar("Exercise already exists.")
+                        }
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
