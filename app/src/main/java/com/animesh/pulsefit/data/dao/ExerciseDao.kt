@@ -35,6 +35,20 @@ interface ExerciseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExercise(exercise: Exercise): Long
 
+    @Query(
+        """
+    SELECT EXISTS(
+        SELECT 1
+        FROM exercise
+        WHERE LOWER(name) = LOWER(:name)
+    )
+"""
+    )
+    suspend fun exerciseExists(name: String): Boolean
+
+    @Query("SELECT * FROM exercise WHERE name = :name LIMIT 1")
+    suspend fun getExerciseByName(name: String): Exercise?
+
     @Update
     suspend fun updateExercise(exercise: Exercise)
 

@@ -21,8 +21,14 @@ interface WorkoutDao {
     @Query("SELECT * FROM workout WHERE id = :id")
     suspend fun getWorkoutById(id: Long): Workout?
 
+    @Query("SELECT * FROM workout WHERE name = :name LIMIT 1")
+    suspend fun getWorkoutByName(name: String): Workout?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWorkout(workout: Workout): Long
+
+    @Insert
+    suspend fun insertWorkouts(workouts: List<Workout>)
 
     @Update
     suspend fun updateWorkout(workout: Workout)

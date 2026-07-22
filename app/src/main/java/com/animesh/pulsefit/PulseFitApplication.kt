@@ -30,14 +30,8 @@ class PulseFitApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         CoroutineScope(Dispatchers.IO).launch {
-
-            val dao = database.exerciseDao()
-
-            if (dao.getExerciseCount() == 0) {
-                dao.insertExercises(DatabaseSeeder.exercises)
-            }
+            DatabaseSeeder.seedDatabase(database)
         }
     }
 }
