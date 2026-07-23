@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Exercise
+import com.animesh.pulsefit.data.entity.Workout
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import com.animesh.pulsefit.data.repository.WorkoutRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,12 +16,21 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ExerciseViewModel(
-    private val repository: ExerciseRepository
+    private val exerciseRepository: ExerciseRepository,
+    private val workoutRepository: WorkoutRepository
 ) : ViewModel() {
 
     val exercises: StateFlow<List<Exercise>> =
-        repository
+        exerciseRepository
             .getAllExercises()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000),
+                initialValue = emptyList()
+            )
+    val workouts: StateFlow<List<Workout>> =
+        workoutRepository
+            .getAllWorkouts()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5000),
@@ -36,31 +47,32 @@ class ExerciseViewModel(
     }
 
     suspend fun createExercise(exercise: Exercise): Boolean {
-        if (repository.exerciseExists(exercise.name)) {
+        if (exerciseRepository.exerciseExists(exercise.name)) {
             return false
         }
 
-        repository.createExercise(exercise)
+        exerciseRepository.createExercise(exercise)
         _message.emit("Exercise saved successfully.")
         return true
     }
 
     fun deleteExercise(exercise: Exercise) {
         viewModelScope.launch {
-            repository.deleteExercise(exercise)
+            exerciseRepository.deleteExercise(exercise)
         }
     }
 
     fun toggleFavorite(exercise: Exercise) {
         viewModelScope.launch {
-            repository.toggleFavorite(exercise)
+            exerciseRepository.toggleFavorite(exercise)
         }
     }
 
     companion object {
 
         fun factory(
-            repository: ExerciseRepository
+            exerciseRepository: ExerciseRepository,
+            workoutRepository: WorkoutRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
 
@@ -68,7 +80,7 @@ class ExerciseViewModel(
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>
                 ): T {
-                    return ExerciseViewModel(repository) as T
+                    return ExerciseViewModel(exerciseRepository,workoutRepository) as T
                 }
             }
     }

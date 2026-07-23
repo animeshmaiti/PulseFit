@@ -23,6 +23,7 @@ import com.animesh.pulsefit.ui.components.CreateBottomSheet
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
+import com.animesh.pulsefit.ui.exercise.components.WorkoutCard
 import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 
@@ -36,6 +37,7 @@ fun ExerciseScreen(
     var showCreateSheet by rememberSaveable { mutableStateOf(false) }
 
     val exercises by viewModel.exercises.collectAsStateWithLifecycle()
+    val workouts by viewModel.workouts.collectAsStateWithLifecycle()
 
     val filteredExercises = remember(exercises, searchQuery) {
         if (searchQuery.isBlank()) {
@@ -115,16 +117,35 @@ fun ExerciseScreen(
             }
 
             item {
-
                 SectionTitle(
                     title = "Workouts",
                     showSearch = true,
                     onSearchClick = {
-                        // TODO
+                        // Later
                     }
                 )
+            }
 
-                EmptySection("No workouts")
+            if (workouts.isEmpty()) {
+
+                item {
+                    EmptySection("No workouts")
+                }
+
+            } else {
+
+                items(workouts) { workout ->
+
+                    WorkoutCard(
+                        workout = workout,
+                        onFavoriteClick = {
+                            // TODO
+                        },
+                        onClick = {
+                            // TODO
+                        }
+                    )
+                }
             }
         }
 

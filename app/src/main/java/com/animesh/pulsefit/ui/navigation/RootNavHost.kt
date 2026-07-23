@@ -20,7 +20,8 @@ fun RootNavHost() {
 
     val exerciseViewModel: ExerciseViewModel = viewModel(
         factory = ExerciseViewModel.factory(
-            app.exerciseRepository
+            app.exerciseRepository,
+            app.workoutRepository
         )
     )
 
@@ -44,7 +45,10 @@ fun RootNavHost() {
         }
 
         composable(RootScreen.AddWorkout.route) {
-            AddWorkoutScreen(rootNavController)
+            AddWorkoutScreen(
+                rootNavController = rootNavController,
+//                viewModel = exerciseViewModel
+            )
         }
 
 //        composable(
