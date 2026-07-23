@@ -62,9 +62,14 @@ class ExerciseViewModel(
         }
     }
 
-    fun toggleFavorite(exercise: Exercise) {
+    fun toggleFavoriteExercise(exercise: Exercise) {
         viewModelScope.launch {
             exerciseRepository.toggleFavorite(exercise)
+        }
+    }
+    fun toggleFavoriteWorkout(workout: Workout) {
+        viewModelScope.launch {
+            workoutRepository.toggleFavorite(workout)
         }
     }
 

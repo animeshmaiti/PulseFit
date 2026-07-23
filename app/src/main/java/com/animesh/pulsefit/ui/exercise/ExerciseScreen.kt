@@ -48,6 +48,13 @@ fun ExerciseScreen(
             }
         }
     }
+    val favoriteExercises = remember(exercises) {
+        exercises.filter { it.isFavorite }
+    }
+
+    val favoriteWorkouts = remember(workouts) {
+        workouts.filter { it.isFavorite }
+    }
 
     Scaffold(
         floatingActionButton = {
@@ -70,7 +77,35 @@ fun ExerciseScreen(
 
             item {
                 SectionTitle("Favorites")
-                EmptySection("No favorite exercises")
+            }
+
+            if (favoriteExercises.isEmpty() && favoriteWorkouts.isEmpty()) {
+
+                item {
+                    EmptySection("No favorite exercises or workouts")
+                }
+
+            } else {
+
+                items(favoriteExercises) { exercise ->
+
+                    ExerciseCard(
+                        exercise = exercise,
+                        onFavoriteClick = {
+                            viewModel.toggleFavoriteExercise(exercise)
+                        }
+                    )
+                }
+
+                items(favoriteWorkouts) { workout ->
+
+                    WorkoutCard(
+                        workout = workout,
+                        onFavoriteClick = {
+                            viewModel.toggleFavoriteWorkout(workout)
+                        }
+                    )
+                }
             }
 
             item {
@@ -107,39 +142,28 @@ fun ExerciseScreen(
             }
 
             items(filteredExercises) { exercise ->
-
                 ExerciseCard(
                     exercise = exercise,
                     onFavoriteClick = {
-                        viewModel.toggleFavorite(exercise)
+                        viewModel.toggleFavoriteExercise(exercise)
                     }
                 )
             }
 
             item {
-                SectionTitle(
-                    title = "Workouts",
-                    showSearch = true,
-                    onSearchClick = {
-                        // Later
-                    }
-                )
+                SectionTitle(title = "Workouts")
             }
 
             if (workouts.isEmpty()) {
-
                 item {
                     EmptySection("No workouts")
                 }
-
             } else {
-
                 items(workouts) { workout ->
-
                     WorkoutCard(
                         workout = workout,
                         onFavoriteClick = {
-                            // TODO
+                            viewModel.toggleFavoriteWorkout(workout)
                         },
                         onClick = {
                             // TODO
@@ -150,7 +174,6 @@ fun ExerciseScreen(
         }
 
         if (showCreateSheet) {
-
             CreateBottomSheet(
 
                 onDismiss = {
@@ -158,18 +181,14 @@ fun ExerciseScreen(
                 },
 
                 onCreateExercise = {
-
                     showCreateSheet = false
-
                     rootNavController.navigate(
                         RootScreen.AddExercise.route
                     )
                 },
 
                 onCreateWorkout = {
-
                     showCreateSheet = false
-
                     rootNavController.navigate(
                         RootScreen.AddWorkout.route
                     )
