@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
-import com.animesh.pulsefit.ui.components.CreateBottomSheet
+import com.animesh.pulsefit.ui.components.bottomsheet.CreateBottomSheet
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.ExerciseCard
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle

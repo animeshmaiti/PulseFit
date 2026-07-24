@@ -34,15 +34,15 @@ import androidx.navigation.NavHostController
 import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.enums.ExerciseCategory
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
-import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 import com.animesh.pulsefit.ui.extensions.displayName
+import com.animesh.pulsefit.viewmodel.AddExerciseViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddExerciseScreen(
     rootNavController: NavHostController,
-    viewModel: ExerciseViewModel
+    addExerciseViewModel: AddExerciseViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -206,7 +206,7 @@ fun AddExerciseScreen(
                     )
 
                     scope.launch {
-                        val success = viewModel.createExercise(exercise)
+                        val success = addExerciseViewModel.createExercise(exercise)
                         if (success) {
                             rootNavController.popBackStack()
                         } else {

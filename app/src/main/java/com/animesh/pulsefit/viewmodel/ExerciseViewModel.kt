@@ -36,26 +36,6 @@ class ExerciseViewModel(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = emptyList()
             )
-    private val _message = MutableSharedFlow<String>(
-        replay = 1
-    )
-    val message = _message.asSharedFlow()
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun clearMessage() {
-        _message.resetReplayCache()
-    }
-
-    suspend fun createExercise(exercise: Exercise): Boolean {
-        if (exerciseRepository.exerciseExists(exercise.name)) {
-            return false
-        }
-
-        exerciseRepository.createExercise(exercise)
-        _message.emit("Exercise saved successfully.")
-        return true
-    }
-
     fun deleteExercise(exercise: Exercise) {
         viewModelScope.launch {
             exerciseRepository.deleteExercise(exercise)

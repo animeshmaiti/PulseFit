@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.animesh.pulsefit.PulseFitApplication
 import com.animesh.pulsefit.ui.exercise.create.AddExerciseScreen
 import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
+import com.animesh.pulsefit.viewmodel.AddExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 
 @Composable
@@ -24,6 +25,12 @@ fun RootNavHost() {
             app.workoutRepository
         )
     )
+    val addExerciseViewModel: AddExerciseViewModel = viewModel(
+        factory = AddExerciseViewModel.factory(
+            app.exerciseRepository
+        )
+    )
+
 
     NavHost(
         navController = rootNavController,
@@ -32,22 +39,23 @@ fun RootNavHost() {
 
         composable(RootScreen.Main.route) {
             MainGraph(
-                rootNavController=rootNavController,
-                exerciseViewModel = exerciseViewModel
+                rootNavController = rootNavController,
+                exerciseViewModel = exerciseViewModel,
+                addExerciseViewModel = addExerciseViewModel
             )
         }
 
         composable(RootScreen.AddExercise.route) {
             AddExerciseScreen(
                 rootNavController = rootNavController,
-                viewModel = exerciseViewModel
+                addExerciseViewModel = addExerciseViewModel
             )
         }
 
         composable(RootScreen.AddWorkout.route) {
             AddWorkoutScreen(
                 rootNavController = rootNavController,
-//                viewModel = exerciseViewModel
+                viewModel = exerciseViewModel
             )
         }
 
