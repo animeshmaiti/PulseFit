@@ -1,5 +1,6 @@
 package com.animesh.pulsefit.ui.exercise.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -26,16 +27,33 @@ import com.animesh.pulsefit.ui.exercise.icon
 @Composable
 fun ExerciseCard(
     exercise: Exercise,
-    onFavoriteClick: () -> Unit,
-    onClick: () -> Unit = {}
+    onFavoriteClick: (() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
+    selected: Boolean = false
 ) {
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 6.dp)
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(),
+            .clickable(enabled = onClick != null) {
+                onClick?.invoke()
+            },
+        colors = CardDefaults.cardColors(
+            containerColor =
+            if (selected)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                MaterialTheme.colorScheme.surfaceContainerHighest
+        ),
+        border = if (selected) {
+            BorderStroke(
+                2.dp,
+                MaterialTheme.colorScheme.primary
+            )
+        } else {
+            null
+        },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 2.dp
         )
@@ -67,18 +85,20 @@ fun ExerciseCard(
                 overflow = TextOverflow.Ellipsis
             )
 
-            IconButton(
-                onClick = onFavoriteClick
-            ) {
-                Icon(
-                    painter = painterResource(
-                        if (exercise.isFavorite)
-                            R.drawable.star_fill_24px
-                        else
-                            R.drawable.star_24px
-                    ),
-                    contentDescription = "Favorite"
-                )
+            if (onFavoriteClick != null) {
+                IconButton(
+                    onClick = onFavoriteClick
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            if (exercise.isFavorite)
+                                R.drawable.star_fill_24px
+                            else
+                                R.drawable.star_24px
+                        ),
+                        contentDescription = "Favorite"
+                    )
+                }
             }
         }
     }

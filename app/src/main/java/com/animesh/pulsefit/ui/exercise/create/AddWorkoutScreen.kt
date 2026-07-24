@@ -21,14 +21,19 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
+import com.animesh.pulsefit.ui.components.bottomsheet.ExercisePickerBottomSheet
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
+import com.animesh.pulsefit.ui.exercise.create.model.WorkoutExerciseUi
+import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 
 @Composable
 fun AddWorkoutScreen(
-    rootNavController: NavHostController
+    rootNavController: NavHostController,
+    viewModel:ExerciseViewModel
 ) {
 
     var workoutName by rememberSaveable {
@@ -38,6 +43,14 @@ fun AddWorkoutScreen(
     var description by rememberSaveable {
         mutableStateOf("")
     }
+
+    val selectedExercises = remember {
+        mutableStateListOf<WorkoutExerciseUi>()
+    }
+    var showExercisePicker by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val exercises by viewModel.exercises.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -67,7 +80,29 @@ fun AddWorkoutScreen(
             }
         }
     ) { padding ->
+        if (showExercisePicker) {
+            ExercisePickerBottomSheet(
+                exercises = exercises,
+                onDismiss = {
+                    showExercisePicker = false
+                },
+                onAdd = { selected ->
 
+                    selected.forEach { exercise ->
+
+                        if (selectedExercises.none { it.exercise.id == exercise.id }) {
+                            selectedExercises.add(
+                                WorkoutExerciseUi(
+                                    exercise = exercise
+                                )
+                            )
+                        }
+                    }
+
+                    showExercisePicker = false
+                }
+            )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -106,13 +141,18 @@ fun AddWorkoutScreen(
 
                 SectionTitle("Exercises")
 
-                EmptySection(
-                    "No exercises added yet."
-                )
+                if (selectedExercises.isEmpty()) {
+                    EmptySection(
+                        "No exercises added yet."
+                    )
+                } else {
+
+                    // Render cards here
+                }
 
                 OutlinedButton(
                     onClick = {
-                        // TODO
+                        showExercisePicker = true
                     },
                     modifier = Modifier
                         .fillMaxWidth()
