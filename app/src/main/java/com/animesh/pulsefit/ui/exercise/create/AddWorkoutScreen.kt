@@ -114,10 +114,10 @@ fun AddWorkoutScreen(
 
                             WorkoutExerciseCard(
                                 workoutExercise = workoutExercise,
-                                onEditDuration = {
+                                onEditDuration = { seconds ->
                                     viewModel.updateDuration(
                                         workoutExercise.exercise.id,
-                                        30 // Temporary static value
+                                        seconds
                                     )
                                 },
                                 onRemove = {

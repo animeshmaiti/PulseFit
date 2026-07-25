@@ -15,21 +15,41 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.animesh.pulsefit.data.enums.BreakType
+import com.animesh.pulsefit.ui.components.DurationPickerDialog
 import com.animesh.pulsefit.ui.exercise.create.model.WorkoutExerciseUi
 
 @Composable
 fun WorkoutExerciseCard(
     workoutExercise: WorkoutExerciseUi,
     onRemove: () -> Unit,
-    onEditDuration: () -> Unit,
+    onEditDuration: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var showDurationPicker by remember {
+        mutableStateOf(false)
+    }
 
+    if (showDurationPicker) {
+        DurationPickerDialog(
+            initialSeconds = workoutExercise.duration,
+            onDismiss = {
+                showDurationPicker = false
+            },
+            onConfirm = { seconds ->
+                onEditDuration(seconds)
+                showDurationPicker = false
+            }
+        )
+    }
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -82,7 +102,9 @@ fun WorkoutExerciseCard(
             ) {
 
                 OutlinedButton(
-                    onClick = onEditDuration
+                    onClick = {
+                        showDurationPicker = true
+                    }
                 ) {
                     Text("${workoutExercise.duration}s")
                 }
