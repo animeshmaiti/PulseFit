@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,8 @@ import com.animesh.pulsefit.ui.components.picktime.components.NumberWheel
 import com.animesh.pulsefit.ui.components.picktime.utils.PickTimeFocusIndicator
 import com.animesh.pulsefit.ui.components.picktime.utils.PickTimeTextStyle
 
+private const val MAX_HOURS = 12
+
 @Composable
 fun PickHourMinuteSecond(
     initialHour: Int,
@@ -27,31 +30,35 @@ fun PickHourMinuteSecond(
     initialSecond: Int,
     onSecondChange: (Int) -> Unit,
     selectedTextStyle: PickTimeTextStyle = PickTimeTextStyle(
-        color = Color(0xFF404040),
+        color = MaterialTheme.colorScheme.primary,
         fontSize = 24.sp,
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
     ),
     unselectedTextStyle: PickTimeTextStyle = PickTimeTextStyle(
-        color = Color(0xFF9F9F9F),
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         fontSize = 18.sp,
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
     ),
     verticalSpace: Dp = 10.dp,
     horizontalSpace: Dp = 10.dp,
-    containerColor: Color = Color(0xFFFFFFFF),
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     isLooping: Boolean = false,
     extraRow: Int = 2,
     focusIndicator: PickTimeFocusIndicator = PickTimeFocusIndicator(
         enabled = true,
         widthFull = false,
-        background = Color(0xFFFFFFFF),
+        background = MaterialTheme.colorScheme.surfaceContainerHighest,
         shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(4.dp, Color(0xFFEE4720)),
+        border = BorderStroke(
+            2.dp,
+            MaterialTheme.colorScheme.primary
+        ),
     )
 ) {
-    val displayedHour = initialHour.coerceIn(0, 23)
+
+    val displayedHour = initialHour.coerceIn(0, MAX_HOURS)
     val displayedMinute = initialMinute.coerceIn(0, 59)
     val displayedSecond = initialSecond.coerceIn(0, 59)
     val row = extraRow.coerceIn(1, 5)
@@ -67,7 +74,7 @@ fun PickHourMinuteSecond(
         focusIndicator = focusIndicator
     ){
         NumberWheel(
-            items = (0..23).toList(),
+            items = (0..MAX_HOURS).toList(),
             selectedItem = displayedHour,
             onItemSelected = onHourChange,
             space = verticalSpace,
