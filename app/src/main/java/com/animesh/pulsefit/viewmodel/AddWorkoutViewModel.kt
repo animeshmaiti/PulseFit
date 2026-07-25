@@ -44,6 +44,57 @@ class AddWorkoutViewModel(
     fun onDescriptionChanged(description: String) {
         this.description = description
     }
+    fun toggleExercise(exercise: Exercise) {
+
+        val existing =
+            selectedExercises.firstOrNull {
+                it.exercise.id == exercise.id
+            }
+
+        if (existing != null) {
+            selectedExercises.remove(existing)
+        } else {
+            selectedExercises.add(
+                WorkoutExerciseUi(
+                    exercise = exercise
+                )
+            )
+        }
+    }
+
+    fun isSelected(exercise: Exercise): Boolean {
+        return selectedExercises.any {
+            it.exercise.id == exercise.id
+        }
+    }
+    fun removeExercise(exerciseId: Long) {
+
+        selectedExercises.removeAll {
+            it.exercise.id == exerciseId
+        }
+
+    }
+
+    fun updateDuration(
+        exerciseId: Long,
+        duration: Int
+    ) {
+
+        val index = selectedExercises.indexOfFirst {
+            it.exercise.id == exerciseId
+        }
+
+        if (index == -1) return
+
+        selectedExercises[index] =
+            selectedExercises[index].copy(
+                duration = duration
+            )
+    }
+
+    fun clearSelection() {
+        selectedExercises.clear()
+    }
     companion object {
 
         fun factory(

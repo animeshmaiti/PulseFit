@@ -16,41 +16,23 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
-import com.animesh.pulsefit.ui.components.bottomsheet.ExercisePickerBottomSheet
 import com.animesh.pulsefit.ui.exercise.components.EmptySection
 import com.animesh.pulsefit.ui.exercise.components.SectionTitle
-import com.animesh.pulsefit.ui.exercise.create.model.WorkoutExerciseUi
-import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.ui.exercise.components.WorkoutExerciseCard
+import com.animesh.pulsefit.ui.navigation.RootScreen
+import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
 
 @Composable
 fun AddWorkoutScreen(
     rootNavController: NavHostController,
-    viewModel:ExerciseViewModel
+    viewModel: AddWorkoutViewModel
 ) {
-
-    var workoutName by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var description by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    val selectedExercises = remember {
-        mutableStateListOf<WorkoutExerciseUi>()
-    }
-    var showExercisePicker by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val exercises by viewModel.exercises.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -61,6 +43,7 @@ fun AddWorkoutScreen(
                 }
             )
         },
+
         bottomBar = {
             Surface(
                 color = Color.Transparent,
@@ -68,7 +51,7 @@ fun AddWorkoutScreen(
             ) {
                 Button(
                     onClick = {
-                        // TODO
+                        // TODO Save Workout
                     },
                     enabled = false,
                     modifier = Modifier
@@ -79,30 +62,9 @@ fun AddWorkoutScreen(
                 }
             }
         }
+
     ) { padding ->
-        if (showExercisePicker) {
-            ExercisePickerBottomSheet(
-                exercises = exercises,
-                onDismiss = {
-                    showExercisePicker = false
-                },
-                onAdd = { selected ->
 
-                    selected.forEach { exercise ->
-
-                        if (selectedExercises.none { it.exercise.id == exercise.id }) {
-                            selectedExercises.add(
-                                WorkoutExerciseUi(
-                                    exercise = exercise
-                                )
-                            )
-                        }
-                    }
-
-                    showExercisePicker = false
-                }
-            )
-        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -113,10 +75,8 @@ fun AddWorkoutScreen(
         ) {
 
             OutlinedTextField(
-                value = workoutName,
-                onValueChange = {
-                    workoutName = it
-                },
+                value = viewModel.workoutName,
+                onValueChange = viewModel::onWorkoutNameChanged,
                 modifier = Modifier.fillMaxWidth(),
                 label = {
                     Text("Workout Name")
@@ -125,10 +85,8 @@ fun AddWorkoutScreen(
             )
 
             OutlinedTextField(
-                value = description,
-                onValueChange = {
-                    description = it
-                },
+                value = viewModel.description,
+                onValueChange = viewModel::onDescriptionChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -141,18 +99,42 @@ fun AddWorkoutScreen(
 
                 SectionTitle("Exercises")
 
-                if (selectedExercises.isEmpty()) {
+                if (viewModel.selectedExercises.isEmpty()) {
+
                     EmptySection(
                         "No exercises added yet."
                     )
-                } else {
 
-                    // Render cards here
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+
+                        viewModel.selectedExercises.forEach { workoutExercise ->
+
+                            WorkoutExerciseCard(
+                                workoutExercise = workoutExercise,
+                                onEditDuration = {
+                                    viewModel.updateDuration(
+                                        workoutExercise.exercise.id,
+                                        30 // Temporary static value
+                                    )
+                                },
+                                onRemove = {
+                                    viewModel.removeExercise(
+                                        workoutExercise.exercise.id
+                                    )
+                                }
+                            )
+                        }
+                    }
                 }
 
                 OutlinedButton(
                     onClick = {
-                        showExercisePicker = true
+                        rootNavController.navigate(
+                            RootScreen.SelectExercises.route
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()

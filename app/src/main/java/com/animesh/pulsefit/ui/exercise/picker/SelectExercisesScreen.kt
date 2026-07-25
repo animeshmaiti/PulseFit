@@ -2,6 +2,7 @@ package com.animesh.pulsefit.ui.exercise.picker
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -35,7 +36,7 @@ fun SelectExercisesScreen(
 
         topBar = {
             PulseFitBackTopBar(
-                title = "Select Exercises",
+                title = "Select Exercises (${viewModel.selectedExercises.size})",
                 onBack = {
                     rootNavController.popBackStack()
                 }
@@ -50,7 +51,7 @@ fun SelectExercisesScreen(
 
                 HorizontalDivider()
 
-                androidx.compose.foundation.layout.Row(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -68,12 +69,12 @@ fun SelectExercisesScreen(
 
                     Button(
                         onClick = {
-                            // TODO
+                            rootNavController.popBackStack()
                         },
                         modifier = Modifier.weight(1f),
-                        enabled = false
+                        enabled = viewModel.selectedExercises.isNotEmpty()
                     ) {
-                        Text("Add")
+                        Text("Add (${viewModel.selectedExercises.size})")
                     }
                 }
             }
@@ -94,8 +95,9 @@ fun SelectExercisesScreen(
 
                 ExerciseCard(
                     exercise = exercise,
+                    selected = viewModel.isSelected(exercise),
                     onClick = {
-                        // TODO
+                        viewModel.toggleExercise(exercise)
                     }
                 )
             }
