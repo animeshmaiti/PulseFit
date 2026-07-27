@@ -19,12 +19,15 @@ import com.animesh.pulsefit.ui.home.HomeScreen
 import com.animesh.pulsefit.ui.profile.ProfileScreen
 import com.animesh.pulsefit.ui.progress.ProgressScreen
 import com.animesh.pulsefit.ui.settings.SettingsScreen
+import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainGraph(
     rootNavController: NavHostController,
     addExerciseViewModel: AddExerciseViewModel,
+    addWorkoutViewModel:AddWorkoutViewModel,
     exerciseViewModel: ExerciseViewModel
 ) {
 
@@ -60,10 +63,16 @@ fun MainGraph(
             }
 
             composable(MainScreen.Exercise.route) {
-                LaunchedEffect(addExerciseViewModel) {
-                    addExerciseViewModel.message.collect { message ->
-                        snackbarHostState.showSnackbar(message)
-                        addExerciseViewModel.clearMessage()
+                LaunchedEffect(Unit) {
+                    launch {
+                        addExerciseViewModel.message.collect { message ->
+                            snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                    launch {
+                        addWorkoutViewModel.message.collect { message ->
+                            snackbarHostState.showSnackbar(message)
+                        }
                     }
                 }
 

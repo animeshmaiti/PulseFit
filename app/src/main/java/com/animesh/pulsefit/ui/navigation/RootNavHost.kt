@@ -49,7 +49,8 @@ fun RootNavHost() {
             MainGraph(
                 rootNavController = rootNavController,
                 exerciseViewModel = exerciseViewModel,
-                addExerciseViewModel = addExerciseViewModel
+                addExerciseViewModel = addExerciseViewModel,
+                addWorkoutViewModel = addWorkoutViewModel
             )
         }
 
@@ -66,6 +67,7 @@ fun RootNavHost() {
                 viewModel = addWorkoutViewModel
             )
         }
+
         composable(RootScreen.SelectExercises.route) {
             SelectExercisesScreen(
                 rootNavController = rootNavController,

@@ -13,13 +13,15 @@ import com.animesh.pulsefit.data.entity.WorkoutExercise
 import com.animesh.pulsefit.data.repository.ExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutBuilderRepository
 import com.animesh.pulsefit.ui.exercise.create.model.WorkoutExerciseUi
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AddWorkoutViewModel(
-    private val exerciseRepository: ExerciseRepository,
+    exerciseRepository: ExerciseRepository,
     private val workoutBuilderRepository:WorkoutBuilderRepository
 ) : ViewModel() {
 
@@ -37,6 +39,18 @@ class AddWorkoutViewModel(
 
     var description by mutableStateOf("")
         private set
+
+    private val _message =
+        Channel<String>()
+
+    val message =
+        _message.receiveAsFlow()
+
+    private fun reset() {
+        workoutName = ""
+        description = ""
+        selectedExercises.clear()
+    }
 
     val selectedExercises = mutableStateListOf<WorkoutExerciseUi>()
 
@@ -142,7 +156,15 @@ class AddWorkoutViewModel(
                     workoutExercises
                 )
 
+                reset()
+                _message.send("Workout created successfully.")
+
+            } catch (e: Exception) {
+
+                _message.send("Failed to create workout.")
+
             } finally {
+
                 isSaving = false
             }
         }
