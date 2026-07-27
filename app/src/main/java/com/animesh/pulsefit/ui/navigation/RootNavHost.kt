@@ -35,7 +35,7 @@ fun RootNavHost() {
     val addWorkoutViewModel: AddWorkoutViewModel = viewModel(
         factory = AddWorkoutViewModel.factory(
             app.exerciseRepository,
-            app.workoutRepository
+            app.workoutBuilderRepository
         )
     )
 

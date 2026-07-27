@@ -29,49 +29,61 @@ fun PickHourMinuteSecond(
     onMinuteChange: (Int) -> Unit,
     initialSecond: Int,
     onSecondChange: (Int) -> Unit,
-    selectedTextStyle: PickTimeTextStyle = PickTimeTextStyle(
-        color = MaterialTheme.colorScheme.primary,
-        fontSize = 24.sp,
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Bold,
-    ),
-    unselectedTextStyle: PickTimeTextStyle = PickTimeTextStyle(
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        fontSize = 18.sp,
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-    ),
+    selectedTextStyle: PickTimeTextStyle? = null,
+    unselectedTextStyle: PickTimeTextStyle? = null,
     verticalSpace: Dp = 10.dp,
     horizontalSpace: Dp = 10.dp,
-    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    containerColor: Color = Color.Unspecified,
     isLooping: Boolean = false,
     extraRow: Int = 2,
-    focusIndicator: PickTimeFocusIndicator = PickTimeFocusIndicator(
+    focusIndicator: PickTimeFocusIndicator? = null
+) {
+    val colorScheme = MaterialTheme.colorScheme
+
+    val selectedStyle = selectedTextStyle ?: PickTimeTextStyle(
+        color = colorScheme.primary,
+        fontSize = 24.sp,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Bold
+    )
+
+    val unselectedStyle = unselectedTextStyle ?: PickTimeTextStyle(
+        color = colorScheme.onSurfaceVariant,
+        fontSize = 18.sp,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal
+    )
+
+    val backgroundColor =
+        if (containerColor == Color.Unspecified)
+            colorScheme.surfaceContainerHigh
+        else
+            containerColor
+
+    val indicator = focusIndicator ?: PickTimeFocusIndicator(
         enabled = true,
         widthFull = false,
-        background = MaterialTheme.colorScheme.surfaceContainerHighest,
+        background = colorScheme.surfaceContainerHighest,
         shape = RoundedCornerShape(20.dp),
         border = BorderStroke(
             2.dp,
-            MaterialTheme.colorScheme.primary
-        ),
+            colorScheme.primary
+        )
     )
-) {
-
     val displayedHour = initialHour.coerceIn(0, MAX_HOURS)
     val displayedMinute = initialMinute.coerceIn(0, 59)
     val displayedSecond = initialSecond.coerceIn(0, 59)
     val row = extraRow.coerceIn(1, 5)
 
-    val adjustedSelectedTextStyle = if (selectedTextStyle.fontSize < unselectedTextStyle.fontSize) {
-        selectedTextStyle.copy(fontSize = unselectedTextStyle.fontSize)
-    } else selectedTextStyle
+    val adjustedSelectedTextStyle = if (selectedStyle.fontSize < unselectedStyle.fontSize) {
+        selectedStyle.copy(fontSize = unselectedStyle.fontSize)
+    } else selectedStyle
 
     GenericPickTime(
         selectedTextStyle = adjustedSelectedTextStyle,
         verticalSpace = verticalSpace,
-        containerColor = containerColor,
-        focusIndicator = focusIndicator
+        containerColor = backgroundColor,
+        focusIndicator = indicator
     ){
         NumberWheel(
             items = (0..MAX_HOURS).toList(),
@@ -79,7 +91,7 @@ fun PickHourMinuteSecond(
             onItemSelected = onHourChange,
             space = verticalSpace,
             selectedTextStyle = adjustedSelectedTextStyle,
-            unselectedTextStyle = unselectedTextStyle,
+            unselectedTextStyle = unselectedStyle,
             extraRow = row,
             isLooping = isLooping,
         )
@@ -95,7 +107,7 @@ fun PickHourMinuteSecond(
             onItemSelected = onMinuteChange,
             space = verticalSpace,
             selectedTextStyle = adjustedSelectedTextStyle,
-            unselectedTextStyle = unselectedTextStyle,
+            unselectedTextStyle = unselectedStyle,
             extraRow = row,
             isLooping = isLooping
         )
@@ -111,7 +123,7 @@ fun PickHourMinuteSecond(
             onItemSelected = onSecondChange,
             space = verticalSpace,
             selectedTextStyle = adjustedSelectedTextStyle,
-            unselectedTextStyle = unselectedTextStyle,
+            unselectedTextStyle = unselectedStyle,
             extraRow = row,
             isLooping = isLooping
         )

@@ -27,13 +27,13 @@ import com.animesh.pulsefit.ui.exercise.components.SectionTitle
 import com.animesh.pulsefit.ui.exercise.components.WorkoutExerciseCard
 import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
+import com.animesh.pulsefit.viewmodel.utils.toHmsString
 
 @Composable
 fun AddWorkoutScreen(
     rootNavController: NavHostController,
     viewModel: AddWorkoutViewModel
 ) {
-
     Scaffold(
         topBar = {
             PulseFitBackTopBar(
@@ -51,9 +51,11 @@ fun AddWorkoutScreen(
             ) {
                 Button(
                     onClick = {
-                        // TODO Save Workout
+                        viewModel.saveWorkout()
+                        rootNavController.popBackStack()
                     },
-                    enabled = false,
+                    enabled = viewModel.selectedExercises.isNotEmpty() &&
+                            viewModel.workoutName.isNotBlank(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -149,7 +151,7 @@ fun AddWorkoutScreen(
                 SectionTitle("Duration")
 
                 Text(
-                    text = "00:00:00",
+                    text = viewModel.getTotalDuration().toHmsString(),
                     style = MaterialTheme.typography.headlineMedium,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )

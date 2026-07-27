@@ -11,7 +11,7 @@ class WorkoutExerciseRepository(
     fun getExercisesForWorkout(workoutId: Long): Flow<List<WorkoutExercise>> =
         workoutExerciseDao.getExercisesForWorkout(workoutId)
 
-    suspend fun addExerciseToWorkout(
+    suspend fun insertWorkoutExercise(
         workoutExercise: WorkoutExercise
     ): Long =
         workoutExerciseDao.insertWorkoutExercise(workoutExercise)
