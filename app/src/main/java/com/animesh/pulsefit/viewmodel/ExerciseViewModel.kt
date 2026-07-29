@@ -7,11 +7,8 @@ import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.entity.Workout
 import com.animesh.pulsefit.data.repository.ExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
