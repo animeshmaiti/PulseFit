@@ -35,7 +35,7 @@ import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 fun ExerciseDetailScreen(
     exerciseId: Long,
     rootNavController: NavHostController,
-    viewModel:ExerciseDetailViewModel
+    viewModel: ExerciseDetailViewModel
 ) {
     var duration by rememberSaveable {
         mutableIntStateOf(30)
@@ -45,6 +45,11 @@ fun ExerciseDetailScreen(
     }
     LaunchedEffect(exerciseId) {
         viewModel.loadExercise(exerciseId)
+    }
+    LaunchedEffect(Unit) {
+        viewModel.deleted.collect {
+            rootNavController.popBackStack()
+        }
     }
     val exercise = viewModel.exercise
     val isSetup = sessionState == SessionState.SETUP
@@ -75,7 +80,9 @@ fun ExerciseDetailScreen(
                             )
                         }
 
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = {
+                            viewModel.deleteExercise()
+                        }) {
                             Icon(
                                 painter = painterResource(R.drawable.delete_24px),
                                 contentDescription = "Delete"
