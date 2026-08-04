@@ -16,19 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.exercise.details.components.ExerciseFinishedContent
 import com.animesh.pulsefit.ui.exercise.details.components.ExerciseRunningContent
 import com.animesh.pulsefit.ui.exercise.details.components.ExerciseSetupContent
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
+import com.animesh.pulsefit.viewmodel.utils.toHmsString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,12 +34,7 @@ fun ExerciseDetailScreen(
     rootNavController: NavHostController,
     viewModel: ExerciseDetailViewModel
 ) {
-    var duration by rememberSaveable {
-        mutableIntStateOf(30)
-    }
-    var sessionState by rememberSaveable {
-        mutableStateOf(SessionState.SETUP)
-    }
+
     LaunchedEffect(exerciseId) {
         viewModel.loadExercise(exerciseId)
     }
@@ -52,6 +44,9 @@ fun ExerciseDetailScreen(
         }
     }
     val exercise = viewModel.exercise
+    val duration = viewModel.selectedDuration
+    val sessionState = viewModel.sessionState
+
     val isSetup = sessionState == SessionState.SETUP
     Scaffold(
         topBar = {
@@ -61,7 +56,16 @@ fun ExerciseDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        rootNavController.popBackStack()
+                        when (viewModel.sessionState) {
+
+                            SessionState.SETUP -> {
+                                rootNavController.popBackStack()
+                            }
+
+                            else -> {
+                                viewModel.reset()
+                            }
+                        }
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.arrow_back_24px),
@@ -108,24 +112,25 @@ fun ExerciseDetailScreen(
                 SessionState.SETUP -> {
                     ExerciseSetupContent(
                         duration = duration,
-                        onDurationChange = { duration = it }
+                        onDurationChange = viewModel::updateDuration
                     )
                 }
 
-                SessionState.RUNNING -> {
-                    ExerciseRunningContent(
-                        // Later
-                    )
-                }
-
+                SessionState.COUNTDOWN,
+                SessionState.RUNNING,
                 SessionState.PAUSED -> {
                     ExerciseRunningContent(
-                        // Later (paused UI)
+                        displayText = viewModel.displayText,
+                        sessionState = sessionState
                     )
                 }
 
                 SessionState.FINISHED -> {
-                    // Later
+                    ExerciseFinishedContent(
+                        exerciseName = exercise?.name ?: "",
+                        duration = viewModel.totalTime.toHmsString(),
+                        calories = 12, // TODO
+                    )
                 }
             }
 
@@ -134,9 +139,7 @@ fun ExerciseDetailScreen(
                 SessionState.SETUP -> {
 
                     Button(
-                        onClick = {
-                            sessionState = SessionState.RUNNING
-                        },
+                        onClick = viewModel::startSession,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp)
@@ -145,20 +148,82 @@ fun ExerciseDetailScreen(
                     }
                 }
 
+                SessionState.COUNTDOWN -> {
+                    // No buttons during countdown
+                }
+
                 SessionState.RUNNING -> {
 
-                    // Later:
-                    // [ Pause ] [ Finish ]
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+
+                        Button(
+                            onClick = viewModel::pauseSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text("Pause")
+                        }
+
+                        Button(
+                            onClick = viewModel::finishSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text("Finish")
+                        }
+                    }
                 }
 
                 SessionState.PAUSED -> {
 
-                    // Later:
-                    // [ Resume ] [ Finish ] [ Cancel ]
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+
+                        Button(
+                            onClick = viewModel::resumeSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text("Resume")
+                        }
+
+                        Button(
+                            onClick = viewModel::finishSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text("Finish")
+                        }
+
+                        Button(
+                            onClick = viewModel::cancelSession,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
                 }
 
                 SessionState.FINISHED -> {
-                    // Nothing for now
+                    Button(
+                        onClick = {
+                            viewModel.reset()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Done")
+                    }
                 }
             }
         }
