@@ -1,5 +1,6 @@
 package com.animesh.pulsefit.ui.exercise.details.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,10 +42,9 @@ fun ExerciseFinishedContent(
 
             Spacer(Modifier.height(24.dp))
 
-            Icon(
+            Image(
                 painter = painterResource(R.drawable.checked),
                 contentDescription = null,
-                tint = Color.Unspecified,
                 modifier = Modifier
                     .size(88.dp)
                     .align(Alignment.CenterHorizontally)
