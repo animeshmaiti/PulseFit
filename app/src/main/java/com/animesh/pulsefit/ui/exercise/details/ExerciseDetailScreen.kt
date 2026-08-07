@@ -15,6 +15,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -26,6 +27,9 @@ import com.animesh.pulsefit.ui.exercise.details.components.ExerciseRunningConten
 import com.animesh.pulsefit.ui.exercise.details.components.ExerciseSetupContent
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.utils.toHmsString
+import androidx.compose.ui.platform.LocalContext
+import com.animesh.pulsefit.ui.audio.AudioPlayer
+import com.animesh.pulsefit.viewmodel.event.WorkoutSound
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,6 +52,41 @@ fun ExerciseDetailScreen(
     val sessionState = viewModel.sessionState
 
     val isSetup = sessionState == SessionState.SETUP
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+
+        viewModel.sound.collect { sound ->
+
+            when (sound) {
+
+                WorkoutSound.COUNTDOWN ->
+                    AudioPlayer.play(
+                        context,
+                        R.raw.beep_sound
+                    )
+
+                WorkoutSound.GO ->
+                    AudioPlayer.play(
+                        context,
+                        R.raw.beep_sound_end
+                    )
+
+                WorkoutSound.FINISH ->
+                    AudioPlayer.play(
+                        context,
+                        R.raw.finishsound
+                    )
+            }
+        }
+    }
+    DisposableEffect(Unit) {
+
+        onDispose {
+            AudioPlayer.release()
+        }
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -63,6 +102,7 @@ fun ExerciseDetailScreen(
                             }
 
                             else -> {
+                                AudioPlayer.release()
                                 viewModel.reset()
                             }
                         }
@@ -129,7 +169,7 @@ fun ExerciseDetailScreen(
                     ExerciseFinishedContent(
                         exerciseName = exercise?.name ?: "",
                         duration = viewModel.totalTime.toHmsString(),
-                        calories = 12, // TODO
+                        calories = 12000, // TODO
                     )
                 }
             }

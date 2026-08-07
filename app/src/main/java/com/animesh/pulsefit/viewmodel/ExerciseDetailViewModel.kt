@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.repository.ExerciseRepository
 import com.animesh.pulsefit.ui.exercise.details.SessionState
+import com.animesh.pulsefit.viewmodel.event.WorkoutSound
 import com.animesh.pulsefit.viewmodel.utils.toHmsString
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -36,6 +37,10 @@ class ExerciseDetailViewModel(
     var displayText by mutableStateOf(selectedDuration.toHmsString())
         private set
     val deleted = _deleted.receiveAsFlow()
+    private val _sound = Channel<WorkoutSound>()
+
+    val sound = _sound.receiveAsFlow()
+
     fun loadExercise(exerciseId: Long) {
         viewModelScope.launch {
             exercise = repository.getExerciseById(exerciseId)
@@ -51,6 +56,7 @@ class ExerciseDetailViewModel(
             }
         }
     }
+
     private suspend fun runTimer() {
 
         while (remainingTime >= 0 &&
@@ -68,8 +74,9 @@ class ExerciseDetailViewModel(
             remainingTime--
         }
 
-        finishSession()
+        finishSessionInternal()
     }
+
     fun startSession() {
 
         if (sessionState != SessionState.SETUP) return
@@ -81,15 +88,19 @@ class ExerciseDetailViewModel(
         timerJob = viewModelScope.launch {
 
             displayText = "3"
+            _sound.send(WorkoutSound.COUNTDOWN)
             delay(1000)
 
             displayText = "2"
+            _sound.send(WorkoutSound.COUNTDOWN)
             delay(1000)
 
             displayText = "1"
+            _sound.send(WorkoutSound.COUNTDOWN)
             delay(1000)
 
             displayText = "GO!"
+            _sound.send(WorkoutSound.GO)
             delay(700)
 
             sessionState = SessionState.RUNNING
@@ -121,17 +132,24 @@ class ExerciseDetailViewModel(
         }
     }
 
-    fun finishSession() {
-
-        if (sessionState == SessionState.FINISHED) return
-
-        timerJob?.cancel()
+    private suspend fun finishSessionInternal() {
 
         timerJob = null
 
-        totalTime = selectedDuration-remainingTime
+        totalTime = selectedDuration - remainingTime
 
         sessionState = SessionState.FINISHED
+
+        _sound.send(WorkoutSound.FINISH)
+    }
+
+    fun finishSession() {
+
+        timerJob?.cancel()
+
+        viewModelScope.launch {
+            finishSessionInternal()
+        }
     }
 
     fun cancelSession() {
@@ -141,11 +159,13 @@ class ExerciseDetailViewModel(
         timerJob = null
 
         remainingTime = 0
+        totalTime = 0
 
         displayText = selectedDuration.toHmsString()
 
         sessionState = SessionState.SETUP
     }
+
     fun updateDuration(seconds: Int) {
         selectedDuration = seconds
 
@@ -164,9 +184,11 @@ class ExerciseDetailViewModel(
         selectedDuration = exercise?.defaultDuration ?: 30
 
         remainingTime = 0
+        totalTime = 0
 
         displayText = selectedDuration.toHmsString()
     }
+
     companion object {
 
         fun factory(

@@ -77,7 +77,7 @@ fun ExerciseFinishedContent(
             ) {
 
                 Column(
-                    modifier = Modifier.padding(20.dp),
+                    modifier = Modifier.padding(15.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
 
@@ -88,7 +88,8 @@ fun ExerciseFinishedContent(
                     )
 
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
 
                         StatTile(
