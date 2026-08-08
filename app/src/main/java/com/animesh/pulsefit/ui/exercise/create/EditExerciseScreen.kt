@@ -3,7 +3,6 @@ package com.animesh.pulsefit.ui.exercise.create
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
-import com.animesh.pulsefit.ui.exercise.create.ExerciseFormScreen
 import com.animesh.pulsefit.viewmodel.EditExerciseViewModel
 
 @Composable
@@ -12,7 +11,6 @@ fun EditExerciseScreen(
     rootNavController: NavHostController,
     viewModel: EditExerciseViewModel
 ) {
-
     LaunchedEffect(exerciseId) {
         viewModel.loadExercise(exerciseId)
     }
