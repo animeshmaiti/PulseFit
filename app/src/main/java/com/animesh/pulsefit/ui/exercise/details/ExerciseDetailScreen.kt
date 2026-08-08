@@ -29,6 +29,7 @@ import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.utils.toHmsString
 import androidx.compose.ui.platform.LocalContext
 import com.animesh.pulsefit.ui.audio.AudioPlayer
+import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.event.WorkoutSound
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -115,9 +116,15 @@ fun ExerciseDetailScreen(
                 },
                 actions = {
 
-                    if (isSetup) {
+                    if (isSetup && exercise?.isBuiltIn == false) {
 
-                        IconButton(onClick = { }) {
+                        IconButton(
+                            onClick = {
+                                rootNavController.navigate(
+                                    RootScreen.EditExercise.createRoute(exerciseId)
+                                )
+                            }
+                        ) {
                             Icon(
                                 painter = painterResource(R.drawable.edit_24px),
                                 contentDescription = "Edit"

@@ -33,11 +33,6 @@ class ExerciseViewModel(
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = emptyList()
             )
-    fun deleteExercise(exercise: Exercise) {
-        viewModelScope.launch {
-            exerciseRepository.deleteExercise(exercise)
-        }
-    }
 
     fun toggleFavoriteExercise(exercise: Exercise) {
         viewModelScope.launch {

@@ -11,7 +11,7 @@ class AddExerciseViewModel(
     private val exerciseRepository: ExerciseRepository
 ) : ViewModel() {
 
-    private val _message = Channel<String>()
+    private val _message = Channel<String>(Channel.BUFFERED)
     val message = _message.receiveAsFlow()
 
     suspend fun createExercise(exercise: Exercise): Boolean {

@@ -3,16 +3,20 @@ package com.animesh.pulsefit.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.animesh.pulsefit.PulseFitApplication
 import com.animesh.pulsefit.ui.exercise.create.AddExerciseScreen
 import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.ExerciseDetailScreen
+import com.animesh.pulsefit.ui.exercise.create.EditExerciseScreen
 import com.animesh.pulsefit.ui.exercise.picker.SelectExercisesScreen
 import com.animesh.pulsefit.viewmodel.AddExerciseViewModel
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
+import com.animesh.pulsefit.viewmodel.EditExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 
@@ -43,6 +47,11 @@ fun RootNavHost() {
     val exerciseDetailViewModel: ExerciseDetailViewModel = viewModel(
         factory = ExerciseDetailViewModel.factory(
             app.exerciseRepository,
+        )
+    )
+    val editExerciseViewModel: EditExerciseViewModel = viewModel(
+        factory = EditExerciseViewModel.factory(
+            app.exerciseRepository
         )
     )
 
@@ -82,12 +91,26 @@ fun RootNavHost() {
             )
         }
 
-//        composable(
-//            RootScreen.EditExercise.route
-//        ) {
-//            EditExerciseScreen(rootNavController)
-//        }
-//
+        composable(
+            route = RootScreen.EditExercise.route,
+            arguments = listOf(
+                navArgument("exerciseId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+
+            val exerciseId =
+                backStackEntry.arguments?.getLong("exerciseId")
+                    ?: return@composable
+
+            EditExerciseScreen(
+                exerciseId = exerciseId,
+                rootNavController = rootNavController,
+                viewModel = editExerciseViewModel
+            )
+        }
+
         composable(
             route = RootScreen.ExerciseDetail.route
         ) { backStackEntry ->
