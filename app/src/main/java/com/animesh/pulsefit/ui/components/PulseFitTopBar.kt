@@ -17,11 +17,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.animesh.pulsefit.R
 import com.animesh.pulsefit.ui.navigation.MainScreen
+import com.animesh.pulsefit.ui.navigation.RootScreen
 
 @Composable
 fun PulseFitTopBar(
     title: String,
-    navController: NavController
+    navController: NavController,
+    rootNavController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -40,7 +42,7 @@ fun PulseFitTopBar(
 
         IconButton(
             onClick = {
-                navController.navigate(MainScreen.Profile.route) {
+                rootNavController.navigate(RootScreen.Profile.route) {
                     launchSingleTop = true
                 }
             }

@@ -14,11 +14,13 @@ import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.ExerciseDetailScreen
 import com.animesh.pulsefit.ui.exercise.create.EditExerciseScreen
 import com.animesh.pulsefit.ui.exercise.picker.SelectExercisesScreen
+import com.animesh.pulsefit.ui.profile.ProfileScreen
 import com.animesh.pulsefit.viewmodel.AddExerciseViewModel
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
 import com.animesh.pulsefit.viewmodel.EditExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.viewmodel.ProfileViewModel
 
 @Composable
 fun RootNavHost() {
@@ -52,6 +54,11 @@ fun RootNavHost() {
     val editExerciseViewModel: EditExerciseViewModel = viewModel(
         factory = EditExerciseViewModel.factory(
             app.exerciseRepository
+        )
+    )
+    val profileViewModel:ProfileViewModel= viewModel(
+        factory = ProfileViewModel.factory(
+            app.userProfileRepository
         )
     )
 
@@ -88,6 +95,12 @@ fun RootNavHost() {
             SelectExercisesScreen(
                 rootNavController = rootNavController,
                 viewModel = addWorkoutViewModel
+            )
+        }
+        composable(RootScreen.Profile.route) {
+            ProfileScreen(
+                viewModel = profileViewModel,
+                rootNavController = rootNavController
             )
         }
 

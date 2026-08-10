@@ -1,6 +1,7 @@
 package com.animesh.pulsefit.data.database
 
 import com.animesh.pulsefit.data.entity.Exercise
+import com.animesh.pulsefit.data.entity.UserProfile
 import com.animesh.pulsefit.data.entity.Workout
 import com.animesh.pulsefit.data.entity.WorkoutExercise
 import com.animesh.pulsefit.data.enums.BreakType
@@ -108,12 +109,24 @@ object DatabaseSeeder {
             )
         )
     )
+    private val defaultProfile = UserProfile(
+        id = 1,
+        name = "Your Name",
+        age = 0,
+        heightCm = 0f,
+        weightKg = 0f
+    )
 
     suspend fun seedDatabase(database: PulseFitDatabase) {
 
         val exerciseDao = database.exerciseDao()
         val workoutDao = database.workoutDao()
         val workoutExerciseDao = database.workoutExerciseDao()
+        val userProfileDao = database.userProfileDao()
+
+        if (userProfileDao.getProfile() == null) {
+            userProfileDao.saveProfile(defaultProfile)
+        }
 
         if (exerciseDao.getExerciseCount() > 0) {
             return

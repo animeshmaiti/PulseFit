@@ -14,7 +14,5 @@ sealed class MainScreen(
 
    data object Progress : MainScreen("progress", "Progress", R.drawable.monitoring_24px)
 
-   data object Profile : MainScreen("profile", "Profile",null)
-
    data object Settings : MainScreen("settings", "Settings", null)
 }

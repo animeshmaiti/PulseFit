@@ -16,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import com.animesh.pulsefit.ui.components.PulseFitTopBar
 import com.animesh.pulsefit.ui.exercise.ExerciseScreen
 import com.animesh.pulsefit.ui.home.HomeScreen
-import com.animesh.pulsefit.ui.profile.ProfileScreen
 import com.animesh.pulsefit.ui.progress.ProgressScreen
 import com.animesh.pulsefit.ui.settings.SettingsScreen
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
@@ -39,7 +38,8 @@ fun MainGraph(
         topBar = {
             PulseFitTopBar(
                 title = "PulseFit",
-                navController = mainNavController
+                navController = mainNavController,
+                rootNavController = rootNavController
             )
         },
 
@@ -84,10 +84,6 @@ fun MainGraph(
 
             composable(MainScreen.Progress.route) {
                 ProgressScreen()
-            }
-
-            composable(MainScreen.Profile.route) {
-                ProfileScreen()
             }
 
             composable(MainScreen.Settings.route) {

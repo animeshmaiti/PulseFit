@@ -16,6 +16,7 @@ sealed class RootScreen(val route: String) {
 
     data object AddWorkout : RootScreen("add_workout")
     data object SelectExercises: RootScreen("select_exercises")
+    data object Profile : RootScreen("profile")
 
     data object EditWorkout : RootScreen("edit_workout/{workoutId}") {
         fun createRoute(id: Long) = "edit_workout/$id"
