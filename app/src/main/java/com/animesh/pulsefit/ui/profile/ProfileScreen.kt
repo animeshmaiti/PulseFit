@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.ui.profile.components.BloodTypeCard
 import com.animesh.pulsefit.ui.profile.components.BmiCard
 import com.animesh.pulsefit.ui.profile.components.MedicalConditionCard
@@ -68,7 +69,7 @@ fun ProfileScreen(
 
                     IconButton(
                         onClick = {
-                            // Edit later
+                            rootNavController.navigate(RootScreen.EditProfile.route)
                         }
                     ) {
                         Icon(

@@ -93,6 +93,11 @@ fun ExerciseScreen(
                         exercise = exercise,
                         onFavoriteClick = {
                             viewModel.toggleFavoriteExercise(exercise)
+                        },
+                        onClick = {
+                            rootNavController.navigate(
+                                RootScreen.ExerciseDetail.createRoute(exercise.id)
+                            )
                         }
                     )
                 }

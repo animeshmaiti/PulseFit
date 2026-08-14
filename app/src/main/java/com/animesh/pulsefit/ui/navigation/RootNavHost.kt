@@ -139,6 +139,12 @@ fun RootNavHost() {
                 viewModel = exerciseDetailViewModel
             )
         }
+        composable(RootScreen.EditProfile.route) {
+            EditProfileScreen(
+                rootNavController = rootNavController,
+                viewModel = profileViewModel
+            )
+        }
 //
 //        composable(
 //            RootScreen.EditWorkout.route
