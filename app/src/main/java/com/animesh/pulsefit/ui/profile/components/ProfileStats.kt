@@ -14,7 +14,9 @@ import com.animesh.pulsefit.ui.profile.utils.formatValue
 fun ProfileStats(
     profile: UserProfile?
 ) {
-
+    val weight = profile?.weightKg ?: 0f
+    val age = profile?.age ?: 0
+    val height = profile?.heightCm ?: 0f
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -23,8 +25,8 @@ fun ProfileStats(
         ProfileStatCard(
             modifier = Modifier.weight(1f),
             icon = R.drawable.weight_24px,
-            value = if (profile?.weightKg ?: 0f > 0f) {
-                "${profile?.weightKg?.formatValue()} kg"
+            value = if (weight > 0f) {
+                "${weight.formatValue()} kg"
             } else {
                 "--"
             },
@@ -34,8 +36,8 @@ fun ProfileStats(
         ProfileStatCard(
             modifier = Modifier.weight(1f),
             icon = R.drawable.height_24px,
-            value = if (profile?.heightCm ?: 0f > 0f) {
-                "${profile?.heightCm?.formatValue()} cm"
+            value = if (height > 0f) {
+                "${height.formatValue()} cm"
             } else {
                 "--"
             },
@@ -45,8 +47,8 @@ fun ProfileStats(
         ProfileStatCard(
             modifier = Modifier.weight(1f),
             icon = R.drawable.cake_24px,
-            value = if (profile?.age ?: 0 > 0) {
-                "${profile?.age}"
+            value = if (age > 0) {
+                "$age yrs"
             } else {
                 "--"
             },
