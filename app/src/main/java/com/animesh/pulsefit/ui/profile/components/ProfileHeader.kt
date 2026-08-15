@@ -63,9 +63,6 @@ fun ProfileHeader(
                 Image(
                     bitmap = profileBitmap.asImageBitmap(),
                     contentDescription = "Profile picture",
-                    modifier = Modifier
-                        .size(140.dp)
-                        .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
             } else {
