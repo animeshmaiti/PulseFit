@@ -14,6 +14,7 @@ import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.ExerciseDetailScreen
 import com.animesh.pulsefit.ui.exercise.create.EditExerciseScreen
 import com.animesh.pulsefit.ui.exercise.picker.SelectExercisesScreen
+import com.animesh.pulsefit.ui.profile.EditProfileScreen
 import com.animesh.pulsefit.ui.profile.ProfileScreen
 import com.animesh.pulsefit.viewmodel.AddExerciseViewModel
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel

@@ -111,7 +111,7 @@ object DatabaseSeeder {
     )
     private val defaultProfile = UserProfile(
         id = 1,
-        name = "Your Name",
+        name = "",
         age = 0,
         heightCm = 0f,
         weightKg = 0f

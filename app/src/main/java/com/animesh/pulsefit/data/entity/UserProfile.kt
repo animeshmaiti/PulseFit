@@ -9,7 +9,7 @@ data class UserProfile(
     @PrimaryKey
     val id: Int = 1,
 
-    val name: String = "Your Name",
+    val name: String = "",
 
     val age: Int = 0,
 
