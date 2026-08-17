@@ -23,12 +23,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.animesh.pulsefit.R
+import java.util.Locale
 
 @Composable
 fun ExerciseFinishedContent(
     exerciseName: String,
     duration: String,
-    calories: Int,
+    calories: Float,
     modifier: Modifier = Modifier
 ) {
 
@@ -115,7 +116,11 @@ fun ExerciseFinishedContent(
                                 )
                             },
                             title = "Calories",
-                            value = "$calories kcal"
+                            value = String.format(
+                                Locale.getDefault(),
+                                "%.2f kcal",
+                                calories
+                            )
                         )
                     }
 

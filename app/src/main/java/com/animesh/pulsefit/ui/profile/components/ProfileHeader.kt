@@ -48,7 +48,6 @@ fun ProfileHeader(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Box(
             modifier = Modifier
                 .size(120.dp)

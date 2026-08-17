@@ -29,6 +29,7 @@ import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.utils.toHmsString
 import androidx.compose.ui.platform.LocalContext
 import com.animesh.pulsefit.ui.audio.AudioPlayer
+import com.animesh.pulsefit.ui.exercise.details.components.ExerciseCaloriesContent
 import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.event.WorkoutSound
 
@@ -83,7 +84,6 @@ fun ExerciseDetailScreen(
         }
     }
     DisposableEffect(Unit) {
-
         onDispose {
             AudioPlayer.release()
         }
@@ -166,20 +166,30 @@ fun ExerciseDetailScreen(
                 SessionState.COUNTDOWN,
                 SessionState.RUNNING,
                 SessionState.PAUSED -> {
-                    ExerciseRunningContent(
-                        displayText = viewModel.displayText,
-                        sessionState = sessionState
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        ExerciseRunningContent(
+                            displayText = viewModel.displayText,
+                            sessionState = sessionState
+                        )
+                        ExerciseCaloriesContent(
+                            calories = viewModel.caloriesBurned,
+                            sessionState = sessionState,
+                            hasCaloriesData = viewModel.hasCaloriesData
+                        )
+                    }
                 }
 
                 SessionState.FINISHED -> {
                     ExerciseFinishedContent(
                         exerciseName = exercise?.name ?: "",
                         duration = viewModel.totalTime.toHmsString(),
-                        calories = 12000, // TODO
+                        calories = viewModel.caloriesBurned,
                     )
                 }
             }
+
 
             when (sessionState) {
 
