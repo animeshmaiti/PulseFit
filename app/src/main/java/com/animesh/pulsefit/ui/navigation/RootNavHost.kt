@@ -13,6 +13,7 @@ import com.animesh.pulsefit.ui.exercise.create.AddExerciseScreen
 import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.ExerciseDetailScreen
 import com.animesh.pulsefit.ui.exercise.create.EditExerciseScreen
+import com.animesh.pulsefit.ui.exercise.details.WorkoutDetailScreen
 import com.animesh.pulsefit.ui.exercise.picker.SelectExercisesScreen
 import com.animesh.pulsefit.ui.profile.EditProfileScreen
 import com.animesh.pulsefit.ui.profile.ProfileScreen
@@ -22,6 +23,7 @@ import com.animesh.pulsefit.viewmodel.EditExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ProfileViewModel
+import com.animesh.pulsefit.viewmodel.WorkoutDetailViewModel
 
 @Composable
 fun RootNavHost() {
@@ -58,12 +60,19 @@ fun RootNavHost() {
             app.exerciseRepository
         )
     )
-    val profileViewModel:ProfileViewModel= viewModel(
+    val profileViewModel: ProfileViewModel = viewModel(
         factory = ProfileViewModel.factory(
             app.userProfileRepository
         )
     )
 
+    val workoutDetailViewModel: WorkoutDetailViewModel = viewModel(
+        factory = WorkoutDetailViewModel.factory(
+            app.workoutRepository,
+            app.workoutExerciseRepository,
+            app.exerciseRepository
+        )
+    )
 
     NavHost(
         navController = rootNavController,
@@ -141,6 +150,23 @@ fun RootNavHost() {
                 viewModel = exerciseDetailViewModel
             )
         }
+
+        composable(
+            route = RootScreen.WorkoutDetail.route
+        ) { backStackEntry ->
+
+            val workoutId =
+                backStackEntry.arguments
+                    ?.getString("workoutId")
+                    ?.toLongOrNull() ?: return@composable
+
+            WorkoutDetailScreen(
+                workoutId = workoutId,
+                rootNavController = rootNavController,
+                viewModel = workoutDetailViewModel
+            )
+        }
+
         composable(RootScreen.EditProfile.route) {
             EditProfileScreen(
                 rootNavController = rootNavController,

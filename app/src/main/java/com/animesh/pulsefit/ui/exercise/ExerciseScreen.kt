@@ -108,6 +108,11 @@ fun ExerciseScreen(
                         workout = workout,
                         onFavoriteClick = {
                             viewModel.toggleFavoriteWorkout(workout)
+                        },
+                        onClick = {
+                            rootNavController.navigate(
+                                RootScreen.WorkoutDetail.createRoute(workout.id)
+                            )
                         }
                     )
                 }
@@ -176,7 +181,9 @@ fun ExerciseScreen(
                             viewModel.toggleFavoriteWorkout(workout)
                         },
                         onClick = {
-                            // TODO
+                            rootNavController.navigate(
+                                RootScreen.WorkoutDetail.createRoute(workout.id)
+                            )
                         }
                     )
                 }

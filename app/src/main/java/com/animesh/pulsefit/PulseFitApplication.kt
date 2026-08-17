@@ -26,7 +26,7 @@ class PulseFitApplication : Application() {
         WorkoutRepository(database.workoutDao())
     }
 
-    private val workoutExerciseRepository by lazy {
+    val workoutExerciseRepository by lazy {
         WorkoutExerciseRepository(database.workoutExerciseDao())
     }
     val workoutBuilderRepository by lazy {
