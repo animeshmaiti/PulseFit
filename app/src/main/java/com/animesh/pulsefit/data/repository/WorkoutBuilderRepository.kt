@@ -33,4 +33,22 @@ class WorkoutBuilderRepository(
             workoutId
         }
     }
+
+    suspend fun deleteWorkout(
+        workout: Workout
+    ) {
+
+        database.withTransaction {
+
+            // Delete relationships first
+            workoutExerciseRepository.clearWorkout(
+                workout.id
+            )
+
+            // Then delete workout
+            workoutRepository.deleteWorkout(
+                workout
+            )
+        }
+    }
 }

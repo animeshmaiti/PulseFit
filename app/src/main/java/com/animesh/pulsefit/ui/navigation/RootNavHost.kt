@@ -70,7 +70,8 @@ fun RootNavHost() {
         factory = WorkoutDetailViewModel.factory(
             app.workoutRepository,
             app.workoutExerciseRepository,
-            app.exerciseRepository
+            app.exerciseRepository,
+            app.workoutBuilderRepository
         )
     )
 

@@ -9,22 +9,40 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.audio.AudioPlayer
 import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
 import com.animesh.pulsefit.ui.exercise.details.components.BreakTimelineItem
 import com.animesh.pulsefit.ui.exercise.details.components.ExerciseTimelineItem
+import com.animesh.pulsefit.ui.navigation.RootScreen
 import com.animesh.pulsefit.viewmodel.WorkoutDetailViewModel
 import com.animesh.pulsefit.viewmodel.utils.formatDuration
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutDetailScreen(
     workoutId: Long,
@@ -35,16 +53,110 @@ fun WorkoutDetailScreen(
     LaunchedEffect(workoutId) {
         viewModel.loadWorkout(workoutId)
     }
-
+    val scope = rememberCoroutineScope()
     val workout = viewModel.workout ?: return
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
+    val sessionState = viewModel.sessionState
 
+    val isSetup = sessionState == SessionState.SETUP
+    if (showDeleteDialog) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showDeleteDialog = false
+            },
+
+            title = {
+                Text("Delete workout?")
+            },
+
+            text = {
+                Text(
+                    "This will permanently delete this workout " +
+                            "and its exercises."
+                )
+            },
+
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            viewModel.deleteWorkout()
+                            rootNavController.popBackStack()
+                        }
+                    }
+                ) {
+                    Text("Delete")
+                }
+            },
+
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                    }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
     Scaffold(
         topBar = {
-            PulseFitBackTopBar(
-                title = workout.name,
-                onBack = {
-                    rootNavController.popBackStack()
-                }
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(workout.name ?: "")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        when (viewModel.sessionState) {
+
+                            SessionState.SETUP -> {
+                                rootNavController.popBackStack()
+                            }
+
+                            else -> {
+                                AudioPlayer.release()
+//                                viewModel.reset()
+                            }
+                        }
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_back_24px),
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                actions = {
+
+                    if (isSetup == true) {
+
+                        IconButton(
+                            onClick = {
+
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.edit_24px),
+                                contentDescription = "Edit"
+                            )
+                        }
+
+                        IconButton(
+                            onClick = {
+                                showDeleteDialog = true
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.delete_24px),
+                                contentDescription = "Delete"
+                            )
+                        }
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors()
             )
         }
     ) { padding ->

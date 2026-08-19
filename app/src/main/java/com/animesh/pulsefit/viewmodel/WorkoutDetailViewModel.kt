@@ -9,22 +9,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Workout
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import com.animesh.pulsefit.data.repository.WorkoutBuilderRepository
 import com.animesh.pulsefit.data.repository.WorkoutExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutRepository
+import com.animesh.pulsefit.ui.exercise.details.SessionState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class WorkoutDetailViewModel(
     private val workoutRepository: WorkoutRepository,
     private val workoutExerciseRepository: WorkoutExerciseRepository,
-    private val exerciseRepository: ExerciseRepository
+    private val exerciseRepository: ExerciseRepository,
+    private val workoutBuilderRepository: WorkoutBuilderRepository
 ) : ViewModel() {
     data class WorkoutExerciseUi(
         val exerciseName: String,
         val duration: Int,
         val breakDuration: Int
     )
-
+    var sessionState by mutableStateOf(SessionState.SETUP)
+        private set
     var workout by mutableStateOf<Workout?>(null)
         private set
 
@@ -42,7 +48,6 @@ class WorkoutDetailViewModel(
 
     val totalDuration: Int
         get() = totalExerciseDuration + totalBreakDuration
-
 
 
     fun loadWorkout(workoutId: Long) {
@@ -86,13 +91,21 @@ class WorkoutDetailViewModel(
                 }
         }
     }
+    suspend fun deleteWorkout() {
+        val currentWorkout =
+            workout ?: return
 
+            workoutBuilderRepository.deleteWorkout(
+                currentWorkout
+            )
+    }
     companion object {
 
         fun factory(
             workoutRepository: WorkoutRepository,
             workoutExerciseRepository: WorkoutExerciseRepository,
-            exerciseRepository: ExerciseRepository
+            exerciseRepository: ExerciseRepository,
+            workoutBuilderRepository: WorkoutBuilderRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
 
@@ -104,7 +117,8 @@ class WorkoutDetailViewModel(
                     return WorkoutDetailViewModel(
                         workoutRepository,
                         workoutExerciseRepository,
-                        exerciseRepository
+                        exerciseRepository,
+                        workoutBuilderRepository
                     ) as T
                 }
             }
