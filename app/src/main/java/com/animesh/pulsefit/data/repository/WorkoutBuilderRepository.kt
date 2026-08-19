@@ -34,6 +34,31 @@ class WorkoutBuilderRepository(
         }
     }
 
+    suspend fun updateWorkout(
+        workout: Workout,
+        exercises: List<WorkoutExercise>
+    ) {
+
+        database.withTransaction {
+
+            workoutRepository.updateWorkout(workout)
+
+            workoutExerciseRepository.clearWorkout(
+                workout.id
+            )
+
+            exercises.forEachIndexed { index, exercise ->
+
+                workoutExerciseRepository.insertWorkoutExercise(
+                    exercise.copy(
+                        workoutId = workout.id,
+                        position = index
+                    )
+                )
+            }
+        }
+    }
+
     suspend fun deleteWorkout(
         workout: Workout
     ) {

@@ -92,12 +92,11 @@ class WorkoutDetailViewModel(
         }
     }
     suspend fun deleteWorkout() {
-        val currentWorkout =
-            workout ?: return
+        val currentWorkout = workout ?: return
 
-            workoutBuilderRepository.deleteWorkout(
-                currentWorkout
-            )
+        workoutBuilderRepository.deleteWorkout(
+            currentWorkout
+        )
     }
     companion object {
 

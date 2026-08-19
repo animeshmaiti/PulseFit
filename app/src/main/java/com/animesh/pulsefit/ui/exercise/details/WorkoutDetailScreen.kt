@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
 import com.animesh.pulsefit.ui.audio.AudioPlayer
-import com.animesh.pulsefit.ui.components.PulseFitBackTopBar
 import com.animesh.pulsefit.ui.exercise.details.components.BreakTimelineItem
 import com.animesh.pulsefit.ui.exercise.details.components.ExerciseTimelineItem
 import com.animesh.pulsefit.ui.navigation.RootScreen
@@ -135,7 +134,9 @@ fun WorkoutDetailScreen(
 
                         IconButton(
                             onClick = {
-
+                                rootNavController.navigate(
+                                    RootScreen.EditWorkout.createRoute(workoutId)
+                                )
                             }
                         ) {
                             Icon(
@@ -238,19 +239,6 @@ fun WorkoutDetailScreen(
                     .height(56.dp)
             ) {
                 Text("Start")
-            }
-
-            // Edit
-
-            OutlinedButton(
-                onClick = {
-                    // Edit workout later
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-            ) {
-                Text("Edit")
             }
         }
     }

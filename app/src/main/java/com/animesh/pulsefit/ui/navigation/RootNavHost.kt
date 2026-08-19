@@ -13,6 +13,7 @@ import com.animesh.pulsefit.ui.exercise.create.AddExerciseScreen
 import com.animesh.pulsefit.ui.exercise.create.AddWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.ExerciseDetailScreen
 import com.animesh.pulsefit.ui.exercise.create.EditExerciseScreen
+import com.animesh.pulsefit.ui.exercise.create.EditWorkoutScreen
 import com.animesh.pulsefit.ui.exercise.details.WorkoutDetailScreen
 import com.animesh.pulsefit.ui.exercise.picker.SelectExercisesScreen
 import com.animesh.pulsefit.ui.profile.EditProfileScreen
@@ -46,7 +47,10 @@ fun RootNavHost() {
     val addWorkoutViewModel: AddWorkoutViewModel = viewModel(
         factory = AddWorkoutViewModel.factory(
             app.exerciseRepository,
+            app.workoutRepository,
+            app.workoutExerciseRepository,
             app.workoutBuilderRepository
+
         )
     )
     val exerciseDetailViewModel: ExerciseDetailViewModel = viewModel(
@@ -165,6 +169,28 @@ fun RootNavHost() {
                 workoutId = workoutId,
                 rootNavController = rootNavController,
                 viewModel = workoutDetailViewModel
+            )
+        }
+
+        composable(
+            route = RootScreen.EditWorkout.route,
+            arguments = listOf(
+                navArgument("workoutId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+
+            val workoutId =
+                backStackEntry
+                    .arguments
+                    ?.getLong("workoutId")
+                    ?: return@composable
+
+            EditWorkoutScreen(
+                workoutId = workoutId,
+                rootNavController = rootNavController,
+                viewModel = addWorkoutViewModel
             )
         }
 
