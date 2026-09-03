@@ -38,6 +38,7 @@ fun WorkoutFormScreen(
     onSave: () -> Unit
 ) {
     Scaffold(
+
         topBar = {
             PulseFitBackTopBar(
                 title = title,
@@ -58,8 +59,10 @@ fun WorkoutFormScreen(
                         onSave()
                         rootNavController.popBackStack()
                     },
-                    enabled = viewModel.selectedExercises.isNotEmpty() &&
+                    enabled =
+                    viewModel.selectedExercises.isNotEmpty() &&
                             viewModel.workoutName.isNotBlank(),
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -77,8 +80,14 @@ fun WorkoutFormScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+
+            verticalArrangement =
+            Arrangement.spacedBy(20.dp)
         ) {
+
+            // -------------------------------------------------
+            // Workout name
+            // -------------------------------------------------
 
             OutlinedTextField(
                 value = viewModel.workoutName,
@@ -90,16 +99,27 @@ fun WorkoutFormScreen(
                 singleLine = true
             )
 
+
+            // -------------------------------------------------
+            // Description
+            // -------------------------------------------------
+
             OutlinedTextField(
                 value = viewModel.description,
                 onValueChange = viewModel::onDescriptionChanged,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
+
                 label = {
                     Text("Description")
                 }
             )
+
+
+            // -------------------------------------------------
+            // Exercises
+            // -------------------------------------------------
 
             Column {
 
@@ -112,23 +132,52 @@ fun WorkoutFormScreen(
                     )
 
                 } else {
+
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        verticalArrangement =
+                        Arrangement.spacedBy(12.dp)
                     ) {
 
-                        viewModel.selectedExercises.forEach { workoutExercise ->
+                        viewModel.selectedExercises.forEach {
+                                workoutExercise ->
 
                             WorkoutExerciseCard(
-                                workoutExercise = workoutExercise,
+
+                                workoutExercise =
+                                workoutExercise,
+
+                                // Exercise duration
                                 onEditDuration = { seconds ->
+
                                     viewModel.updateDuration(
                                         workoutExercise.exercise.id,
                                         seconds
                                     )
                                 },
+
+                                // Remove exercise
                                 onRemove = {
+
                                     viewModel.removeExercise(
                                         workoutExercise.exercise.id
+                                    )
+                                },
+
+                                // Break type
+                                onBreakTypeChange = { breakType ->
+
+                                    viewModel.updateBreakType(
+                                        workoutExercise.exercise.id,
+                                        breakType
+                                    )
+                                },
+
+                                // Break duration
+                                onEditBreakDuration = { seconds ->
+
+                                    viewModel.updateBreakDuration(
+                                        workoutExercise.exercise.id,
+                                        seconds
                                     )
                                 }
                             )
@@ -136,12 +185,17 @@ fun WorkoutFormScreen(
                     }
                 }
 
+
+                // Add exercise button
+
                 OutlinedButton(
                     onClick = {
+
                         rootNavController.navigate(
                             RootScreen.SelectExercises.route
                         )
                     },
+
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp)
@@ -150,14 +204,26 @@ fun WorkoutFormScreen(
                 }
             }
 
+
+            // -------------------------------------------------
+            // Total duration
+            // -------------------------------------------------
+
             Column {
 
                 SectionTitle("Duration")
 
                 Text(
-                    text = viewModel.getTotalDuration().toHmsString(),
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    text =
+                    viewModel
+                        .getTotalDuration()
+                        .toHmsString(),
+
+                    style =
+                    MaterialTheme.typography.headlineMedium,
+
+                    modifier =
+                    Modifier.padding(horizontal = 16.dp)
                 )
             }
         }

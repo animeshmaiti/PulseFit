@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -32,9 +33,19 @@ fun WorkoutExerciseCard(
     workoutExercise: WorkoutExerciseUi,
     onRemove: () -> Unit,
     onEditDuration: (Int) -> Unit,
+    onBreakTypeChange: (BreakType) -> Unit,
+    onEditBreakDuration: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var showDurationPicker by remember {
+        mutableStateOf(false)
+    }
+
+    var showBreakTypeDialog by remember {
+        mutableStateOf(false)
+    }
+
+    var showBreakPicker by remember {
         mutableStateOf(false)
     }
 
@@ -50,6 +61,61 @@ fun WorkoutExerciseCard(
             }
         )
     }
+
+    if (showBreakTypeDialog) {
+
+        AlertDialog(
+            onDismissRequest = {
+                showBreakTypeDialog = false
+            },
+
+            title = {
+                Text("Break")
+            },
+
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = {
+                            onBreakTypeChange(BreakType.NONE)
+                            showBreakTypeDialog = false
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("No Break")
+                    }
+
+                    OutlinedButton(
+                        onClick = {
+                            showBreakTypeDialog = false
+                            showBreakPicker = true
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Timer")
+                    }
+                }
+            },
+            confirmButton = {}
+        )
+    }
+
+    if (showBreakPicker) {
+        DurationPickerDialog(
+            initialSeconds = workoutExercise.breakDuration,
+            onDismiss = {
+                showBreakPicker = false
+            },
+            onConfirm = { seconds ->
+                onEditBreakDuration(seconds)
+                onBreakTypeChange(BreakType.TIMER)
+                showBreakPicker = false
+            }
+        )
+    }
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -101,6 +167,7 @@ fun WorkoutExerciseCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
+                // Exercise duration
                 OutlinedButton(
                     onClick = {
                         showDurationPicker = true
@@ -109,21 +176,25 @@ fun WorkoutExerciseCard(
                     Text("${workoutExercise.duration}s")
                 }
 
+
+                // Break
                 OutlinedButton(
                     onClick = {
-                        // TODO Change break
+                        showBreakTypeDialog=true
                     }
                 ) {
+
                     Text(
                         when (workoutExercise.breakType) {
+
                             BreakType.NONE ->
                                 "No Break"
 
                             BreakType.TIMER ->
-                                "Timer"
+                                "${workoutExercise.breakDuration}s Break"
 
                             BreakType.MANUAL ->
-                                "${workoutExercise.breakDuration}s Break"
+                                "Manual"
                         }
                     )
                 }
