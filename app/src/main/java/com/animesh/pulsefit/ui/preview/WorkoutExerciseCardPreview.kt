@@ -31,7 +31,9 @@ private fun WorkoutExerciseCardPreview() {
                 breakDuration = 30
             ),
             onRemove = {},
-            onEditDuration = {}
+            onEditDuration = {},
+            onEditBreakDuration = {},
+            onBreakTypeChange = {}
         )
     }
 }

@@ -12,10 +12,7 @@ import com.animesh.pulsefit.data.repository.ExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutBuilderRepository
 import com.animesh.pulsefit.data.repository.WorkoutExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutRepository
-import com.animesh.pulsefit.ui.exercise.details.SessionState
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class WorkoutDetailViewModel(
@@ -29,8 +26,6 @@ class WorkoutDetailViewModel(
         val duration: Int,
         val breakDuration: Int
     )
-    var sessionState by mutableStateOf(SessionState.SETUP)
-        private set
     var workout by mutableStateOf<Workout?>(null)
         private set
 

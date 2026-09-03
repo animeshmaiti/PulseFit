@@ -10,7 +10,6 @@ class WorkoutBuilderRepository(
     private val workoutRepository: WorkoutRepository,
     private val workoutExerciseRepository: WorkoutExerciseRepository
 ) {
-
     suspend fun createWorkout(
         workout: Workout,
         exercises: List<WorkoutExercise>
