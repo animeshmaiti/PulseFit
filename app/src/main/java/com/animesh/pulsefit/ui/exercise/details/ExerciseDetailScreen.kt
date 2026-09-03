@@ -80,6 +80,7 @@ fun ExerciseDetailScreen(
                         context,
                         R.raw.finishsound
                     )
+                else -> Unit
             }
         }
     }

@@ -40,20 +40,33 @@ fun ExerciseRunningContent(
     ) {
         Text(
             text = displayText,
-            style = if (sessionState == SessionState.COUNTDOWN) {
-                MaterialTheme.typography.displayLarge.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
-                    fontFamily = BebasNeue,
-                    fontStyle = FontStyle.Italic,
-                    fontSize = 150.sp,
-                    letterSpacing = 4.sp
-                )
-            } else {
-                MaterialTheme.typography.displayMedium.copy(
-                    fontFamily = Orbitron,
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
+            style = when {
+                displayText.startsWith("Next ") -> {
+                    MaterialTheme.typography.displayMedium.copy(
+                        fontFamily = Orbitron,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+
+                sessionState == SessionState.COUNTDOWN -> {
+                    MaterialTheme.typography.displayLarge.copy(
+                        color = MaterialTheme.colorScheme.tertiary,
+                        fontFamily = BebasNeue,
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 150.sp,
+                        letterSpacing = 4.sp
+                    )
+                }
+
+                else -> {
+                    MaterialTheme.typography.displayMedium.copy(
+                        fontFamily = Orbitron,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         )
     }

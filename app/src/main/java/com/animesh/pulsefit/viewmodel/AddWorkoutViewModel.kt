@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.entity.Workout
 import com.animesh.pulsefit.data.entity.WorkoutExercise
+import com.animesh.pulsefit.data.enums.BreakType
 import com.animesh.pulsefit.data.repository.ExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutBuilderRepository
 import com.animesh.pulsefit.data.repository.WorkoutExerciseRepository
@@ -123,7 +124,6 @@ class AddWorkoutViewModel(
         exerciseId: Long,
         duration: Int
     ) {
-
         val index = selectedExercises.indexOfFirst {
             it.exercise.id == exerciseId
         }
@@ -133,6 +133,48 @@ class AddWorkoutViewModel(
         selectedExercises[index] =
             selectedExercises[index].copy(
                 duration = duration
+            )
+    }
+
+    fun updateBreakType(
+        exerciseId: Long,
+        breakType: BreakType
+    ) {
+
+        val index = selectedExercises.indexOfFirst {
+            it.exercise.id == exerciseId
+        }
+
+        if (index == -1) return
+
+        selectedExercises[index] =
+            selectedExercises[index].copy(
+                breakType = breakType,
+                // Clear duration when changing to No Break
+                breakDuration =
+                if (breakType == BreakType.NONE) {
+                    0
+                } else {
+                    selectedExercises[index].breakDuration
+                }
+            )
+    }
+
+    fun updateBreakDuration(
+        exerciseId: Long,
+        breakDuration: Int
+    ) {
+
+        val index = selectedExercises.indexOfFirst {
+            it.exercise.id == exerciseId
+        }
+
+        if (index == -1) return
+
+        selectedExercises[index] =
+            selectedExercises[index].copy(
+                breakType = BreakType.TIMER,
+                breakDuration = breakDuration
             )
     }
 
@@ -239,18 +281,10 @@ class AddWorkoutViewModel(
                     workoutExercises
                 )
 
-                _message.send(
-                    "Workout updated successfully."
-                )
-
                 reset()
 
             } catch (e: Exception) {
-
-                _message.send(
-                    "Failed to update workout."
-                )
-
+                // empty
             } finally {
 
                 isSaving = false

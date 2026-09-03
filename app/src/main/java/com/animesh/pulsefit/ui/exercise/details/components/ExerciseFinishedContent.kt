@@ -36,107 +36,100 @@ fun ExerciseFinishedContent(
     Column(
         modifier = modifier
             .fillMaxWidth(),
-        verticalArrangement = Arrangement.SpaceBetween
     ) {
+        Image(
+            painter = painterResource(R.drawable.checked),
+            contentDescription = null,
+            modifier = Modifier
+                .size(88.dp)
+                .align(Alignment.CenterHorizontally)
+        )
 
-        Column {
+        Spacer(Modifier.height(16.dp))
 
-            Spacer(Modifier.height(24.dp))
+        Text(
+            text = "Workout Complete!",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
 
-            Image(
-                painter = painterResource(R.drawable.checked),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(88.dp)
-                    .align(Alignment.CenterHorizontally)
+        Text(
+            text = "Great job! Keep up the consistency.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(Modifier.height(32.dp))
+
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(28.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
             )
+        ) {
 
-            Spacer(Modifier.height(16.dp))
-
-            Text(
-                text = "Workout Complete!",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-
-            Text(
-                text = "Great job! Keep up the consistency.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(Modifier.height(32.dp))
-
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                )
+            Column(
+                modifier = Modifier.padding(15.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
 
-                Column(
-                    modifier = Modifier.padding(15.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                Text(
+                    text = "Workout Details",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
 
-                    Text(
-                        text = "Workout Details",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-
-                        StatTile(
-                            modifier = Modifier.weight(1f),
-                            icon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.timer_24px),
-                                    null,
-                                    tint = Color(0xFF66BB6A)
-                                )
-                            },
-                            title = "Duration",
-                            value = duration
-                        )
-
-                        StatTile(
-                            modifier = Modifier.weight(1f),
-                            icon = {
-                                Icon(
-                                    painter = painterResource(R.drawable.local_fire_department_24px),
-                                    null,
-                                    tint = Color(0xFFFF7043)
-                                )
-                            },
-                            title = "Calories",
-                            value = String.format(
-                                Locale.getDefault(),
-                                "%.2f kcal",
-                                calories
-                            )
-                        )
-                    }
-
                     StatTile(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.weight(1f),
                         icon = {
                             Icon(
-                                painter = painterResource(R.drawable.exercise_24px),
+                                painter = painterResource(R.drawable.timer_24px),
                                 null,
-                                tint = Color(0xFF7E57C2)
+                                tint = Color(0xFF66BB6A)
                             )
                         },
-                        title = "Exercise",
-                        value = exerciseName
+                        title = "Duration",
+                        value = duration
+                    )
+
+                    StatTile(
+                        modifier = Modifier.weight(1f),
+                        icon = {
+                            Icon(
+                                painter = painterResource(R.drawable.local_fire_department_24px),
+                                null,
+                                tint = Color(0xFFFF7043)
+                            )
+                        },
+                        title = "Calories",
+                        value = String.format(
+                            Locale.getDefault(),
+                            "%.2f kcal",
+                            calories
+                        )
                     )
                 }
+
+                StatTile(
+                    modifier = Modifier.fillMaxWidth(),
+                    icon = {
+                        Icon(
+                            painter = painterResource(R.drawable.exercise_24px),
+                            null,
+                            tint = Color(0xFF7E57C2)
+                        )
+                    },
+                    title = "Exercise",
+                    value = exerciseName
+                )
             }
         }
     }

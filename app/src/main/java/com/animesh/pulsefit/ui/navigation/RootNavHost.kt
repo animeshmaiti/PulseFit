@@ -25,6 +25,7 @@ import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ProfileViewModel
 import com.animesh.pulsefit.viewmodel.WorkoutDetailViewModel
+import com.animesh.pulsefit.viewmodel.WorkoutSessionViewModel
 
 @Composable
 fun RootNavHost() {
@@ -76,6 +77,14 @@ fun RootNavHost() {
             app.workoutExerciseRepository,
             app.exerciseRepository,
             app.workoutBuilderRepository
+        )
+    )
+    val workoutSessionViewmodel:WorkoutSessionViewModel= viewModel(
+        factory = WorkoutSessionViewModel.factory(
+            app.workoutRepository,
+            app.workoutExerciseRepository,
+            app.exerciseRepository,
+            app.userProfileRepository
         )
     )
 
@@ -168,7 +177,8 @@ fun RootNavHost() {
             WorkoutDetailScreen(
                 workoutId = workoutId,
                 rootNavController = rootNavController,
-                viewModel = workoutDetailViewModel
+                viewModel = workoutDetailViewModel,
+                sessionViewModel = workoutSessionViewmodel
             )
         }
 
