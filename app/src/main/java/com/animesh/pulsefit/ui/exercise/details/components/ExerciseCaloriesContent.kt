@@ -55,7 +55,7 @@ fun ExerciseCaloriesContent(
         if (!hasCaloriesData) {
 
             Text(
-                text = "MET value is not provided",
+                text = "MET/Weight value is not provided",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
