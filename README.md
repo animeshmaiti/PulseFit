@@ -2,7 +2,8 @@
 
 PulseFit is an Android workout and exercise tracking application built with Kotlin and Jetpack Compose.
 The app allows users to create and manage exercises, build custom workouts, configure exercise durations and breaks,
-and perform guided workout sessions with countdowns, timers, sounds, and calorie estimation.
+and perform guided workout sessions with countdowns, timers, sounds, and calorie estimation.This is a offline app so it is
+totally free and no need to login or signup. All data is stored locally on the device using Room Database.
 
 ---
 
