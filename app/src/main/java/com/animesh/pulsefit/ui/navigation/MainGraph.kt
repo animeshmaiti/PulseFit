@@ -54,7 +54,7 @@ fun MainGraph(
 
         NavHost(
             navController = mainNavController,
-            startDestination = MainScreen.Exercise.route,
+            startDestination = MainScreen.Home.route,
             modifier = Modifier.padding(padding)
         ) {
 
