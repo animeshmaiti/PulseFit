@@ -3,6 +3,7 @@ package com.animesh.pulsefit.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.enums.BreakType
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import com.animesh.pulsefit.data.repository.HomeStatsRepository
 import com.animesh.pulsefit.data.repository.UserProfileRepository
 import com.animesh.pulsefit.data.repository.WorkoutExerciseRepository
 import com.animesh.pulsefit.data.repository.WorkoutRepository
@@ -28,7 +30,8 @@ class WorkoutSessionViewModel(
     private val workoutRepository: WorkoutRepository,
     private val workoutExerciseRepository: WorkoutExerciseRepository,
     private val exerciseRepository: ExerciseRepository,
-    private val userProfileRepository: UserProfileRepository
+    private val userProfileRepository: UserProfileRepository,
+    private val homeStatsRepository: HomeStatsRepository
 ) : ViewModel() {
 
     // ---------------------------------------------------------
@@ -37,7 +40,8 @@ class WorkoutSessionViewModel(
 
     var workoutName by mutableStateOf("")
         private set
-
+    var currentWorkoutId by mutableLongStateOf(0L)
+        private set
     var exercises by mutableStateOf<List<WorkoutExerciseUi>>(emptyList())
         private set
 
@@ -170,6 +174,7 @@ class WorkoutSessionViewModel(
                     ?: return@launch
 
             workoutName = workout.name
+            currentWorkoutId=workoutId
 
             val profile =
                 userProfileRepository.getProfile()
@@ -523,6 +528,20 @@ class WorkoutSessionViewModel(
             WorkoutSessionState.FINISHED
 
         viewModelScope.launch {
+
+            if (totalTime > 0) {
+
+
+
+                // TODO: save WorkoutHistory
+
+                homeStatsRepository.addCalories(
+                    calories = caloriesBurned,
+                    workoutId = currentWorkoutId,
+                    workoutName = workoutName
+                )
+            }
+
             _sound.send(
                 WorkoutSound.FINISH
             )
@@ -585,7 +604,8 @@ class WorkoutSessionViewModel(
             workoutRepository: WorkoutRepository,
             workoutExerciseRepository: WorkoutExerciseRepository,
             exerciseRepository: ExerciseRepository,
-            userProfileRepository: UserProfileRepository
+            userProfileRepository: UserProfileRepository,
+            homeStatsRepository: HomeStatsRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
 
@@ -598,7 +618,8 @@ class WorkoutSessionViewModel(
                         workoutRepository,
                         workoutExerciseRepository,
                         exerciseRepository,
-                        userProfileRepository
+                        userProfileRepository,
+                        homeStatsRepository
                     ) as T
                 }
             }

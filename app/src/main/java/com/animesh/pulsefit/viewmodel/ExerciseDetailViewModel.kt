@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.animesh.pulsefit.data.entity.Exercise
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import com.animesh.pulsefit.data.repository.HomeStatsRepository
 import com.animesh.pulsefit.data.repository.UserProfileRepository
 import com.animesh.pulsefit.ui.exercise.details.SessionState
 import com.animesh.pulsefit.viewmodel.event.WorkoutSound
@@ -22,7 +23,8 @@ import kotlinx.coroutines.launch
 
 class ExerciseDetailViewModel(
     private val repository: ExerciseRepository,
-    private val userProfileRepository: UserProfileRepository
+    private val userProfileRepository: UserProfileRepository,
+    private val homeStatsRepository: HomeStatsRepository
 ) : ViewModel() {
 
     var exercise by mutableStateOf<Exercise?>(null)
@@ -242,6 +244,17 @@ class ExerciseDetailViewModel(
         sessionState =
             SessionState.FINISHED
 
+        val currentExercise = exercise
+
+        if (currentExercise != null && totalTime > 0) {
+
+            homeStatsRepository.addCalories(
+                calories = caloriesBurned,
+                exerciseId = currentExercise.id,
+                exerciseName = currentExercise.name
+            )
+        }
+
         _sound.send(
             WorkoutSound.FINISH
         )
@@ -308,7 +321,8 @@ class ExerciseDetailViewModel(
 
         fun factory(
             exerciseRepository: ExerciseRepository,
-            userProfileRepository: UserProfileRepository
+            userProfileRepository: UserProfileRepository,
+            homeStatsRepository: HomeStatsRepository
         ): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
 
@@ -319,7 +333,8 @@ class ExerciseDetailViewModel(
 
                     return ExerciseDetailViewModel(
                         exerciseRepository,
-                        userProfileRepository
+                        userProfileRepository,
+                        homeStatsRepository
                     ) as T
                 }
             }

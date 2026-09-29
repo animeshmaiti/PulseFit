@@ -4,6 +4,7 @@ import android.app.Application
 import com.animesh.pulsefit.data.database.DatabaseProvider
 import com.animesh.pulsefit.data.database.DatabaseSeeder
 import com.animesh.pulsefit.data.repository.ExerciseRepository
+import com.animesh.pulsefit.data.repository.HomeStatsRepository
 import com.animesh.pulsefit.data.repository.UserProfileRepository
 import com.animesh.pulsefit.data.repository.WorkoutBuilderRepository
 import com.animesh.pulsefit.data.repository.WorkoutExerciseRepository
@@ -38,6 +39,10 @@ class PulseFitApplication : Application() {
     }
     val userProfileRepository by lazy {
         UserProfileRepository(database.userProfileDao())
+    }
+
+    val homeStatsRepository by lazy {
+        HomeStatsRepository(database.homeStatsDao())
     }
 
     override fun onCreate() {

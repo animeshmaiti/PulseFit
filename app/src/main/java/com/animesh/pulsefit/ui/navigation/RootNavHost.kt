@@ -57,7 +57,8 @@ fun RootNavHost() {
     val exerciseDetailViewModel: ExerciseDetailViewModel = viewModel(
         factory = ExerciseDetailViewModel.factory(
             app.exerciseRepository,
-            app.userProfileRepository
+            app.userProfileRepository,
+            app.homeStatsRepository
         )
     )
     val editExerciseViewModel: EditExerciseViewModel = viewModel(
@@ -84,7 +85,8 @@ fun RootNavHost() {
             app.workoutRepository,
             app.workoutExerciseRepository,
             app.exerciseRepository,
-            app.userProfileRepository
+            app.userProfileRepository,
+            app.homeStatsRepository
         )
     )
 

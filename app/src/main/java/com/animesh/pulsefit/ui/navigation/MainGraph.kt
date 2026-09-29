@@ -34,7 +34,6 @@ fun MainGraph(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Scaffold(
-
         topBar = {
             PulseFitTopBar(
                 title = "PulseFit",
