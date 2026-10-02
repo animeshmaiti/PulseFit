@@ -20,6 +20,7 @@ import com.animesh.pulsefit.ui.progress.ProgressScreen
 import com.animesh.pulsefit.ui.settings.SettingsScreen
 import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -27,7 +28,8 @@ fun MainGraph(
     rootNavController: NavHostController,
     addExerciseViewModel: AddExerciseViewModel,
     addWorkoutViewModel:AddWorkoutViewModel,
-    exerciseViewModel: ExerciseViewModel
+    exerciseViewModel: ExerciseViewModel,
+    homeViewModel: HomeViewModel
 ) {
 
     val mainNavController = rememberNavController()
@@ -58,7 +60,11 @@ fun MainGraph(
         ) {
 
             composable(MainScreen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    homeViewModel=homeViewModel,
+                    rootNavController = rootNavController,
+                    mainNavController = mainNavController
+                )
             }
 
             composable(MainScreen.Exercise.route) {

@@ -16,15 +16,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.animesh.pulsefit.R
+import com.animesh.pulsefit.ui.navigation.MainScreen
+import com.animesh.pulsefit.ui.navigation.RootScreen
+import com.animesh.pulsefit.viewmodel.HomeViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    homeViewModel: HomeViewModel,
+    rootNavController: NavHostController,
+    mainNavController: NavHostController
+) {
+
+    val homeStats by homeViewModel.homeStats.collectAsState()
 
     Column(
         modifier = Modifier
@@ -40,16 +52,24 @@ fun HomeScreen() {
 
             HomeStatCard(
                 title = "Streak",
-                value = "0 days",
+                value = "${homeStats?.streak ?: 0} days",
                 icon = R.drawable.burn,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    mainNavController.navigate(MainScreen.Progress.route)
+                }
             )
 
             HomeStatCard(
                 title = "Last Exercise",
-                value = "None",
+                value = homeStats?.lastExerciseName ?: "None",
                 icon = R.drawable.lastex,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    homeStats?.lastExerciseId?.let { id ->
+                        rootNavController.navigate(RootScreen.ExerciseDetail.createRoute(id))
+                    }
+                }
             )
         }
 
@@ -60,16 +80,24 @@ fun HomeScreen() {
 
             HomeStatCard(
                 title = "Last Workout",
-                value = "None",
+                value = homeStats?.lastWorkoutName ?: "None",
                 icon = R.drawable.workout,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    homeStats?.lastWorkoutId?.let { id ->
+                        rootNavController.navigate(RootScreen.WorkoutDetail.createRoute(id))
+                    }
+                }
             )
 
             HomeStatCard(
                 title = "Calories Today",
-                value = "0 kcal",
+                value = "${homeStats?.caloriesBurned?.toInt() ?: 0} kcal",
                 icon = R.drawable.kcal,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                onClick = {
+                    mainNavController.navigate(MainScreen.Progress.route)
+                }
             )
         }
     }
@@ -80,14 +108,16 @@ private fun HomeStatCard(
     title: String,
     value: String,
     @DrawableRes icon: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier.height(150.dp),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
+        ),
+        onClick=onClick
     ) {
 
         Column(
@@ -99,7 +129,7 @@ private fun HomeStatCard(
         ) {
 
             Icon(
-                painter=painterResource(icon),
+                painter = painterResource(icon),
                 contentDescription = title,
                 modifier = Modifier.size(30.dp),
                 tint = Color.Unspecified

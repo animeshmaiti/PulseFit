@@ -23,6 +23,7 @@ import com.animesh.pulsefit.viewmodel.AddWorkoutViewModel
 import com.animesh.pulsefit.viewmodel.EditExerciseViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseDetailViewModel
 import com.animesh.pulsefit.viewmodel.ExerciseViewModel
+import com.animesh.pulsefit.viewmodel.HomeViewModel
 import com.animesh.pulsefit.viewmodel.ProfileViewModel
 import com.animesh.pulsefit.viewmodel.WorkoutDetailViewModel
 import com.animesh.pulsefit.viewmodel.WorkoutSessionViewModel
@@ -80,12 +81,17 @@ fun RootNavHost() {
             app.workoutBuilderRepository
         )
     )
-    val workoutSessionViewmodel:WorkoutSessionViewModel= viewModel(
+    val workoutSessionViewmodel: WorkoutSessionViewModel = viewModel(
         factory = WorkoutSessionViewModel.factory(
             app.workoutRepository,
             app.workoutExerciseRepository,
             app.exerciseRepository,
             app.userProfileRepository,
+            app.homeStatsRepository
+        )
+    )
+    val homeViewModel: HomeViewModel = viewModel(
+        factory = HomeViewModel.factory(
             app.homeStatsRepository
         )
     )
@@ -100,7 +106,8 @@ fun RootNavHost() {
                 rootNavController = rootNavController,
                 exerciseViewModel = exerciseViewModel,
                 addExerciseViewModel = addExerciseViewModel,
-                addWorkoutViewModel = addWorkoutViewModel
+                addWorkoutViewModel = addWorkoutViewModel,
+                homeViewModel = homeViewModel
             )
         }
 
@@ -212,17 +219,5 @@ fun RootNavHost() {
                 viewModel = profileViewModel
             )
         }
-//
-//        composable(
-//            RootScreen.EditWorkout.route
-//        ) {
-//            EditWorkoutScreen(rootNavController)
-//        }
-//
-//        composable(
-//            RootScreen.WorkoutSession.route
-//        ) {
-//            WorkoutSessionScreen(rootNavController)
-//        }
     }
 }
